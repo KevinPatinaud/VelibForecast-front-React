@@ -1,4 +1,4 @@
-import { FC, SetStateAction, useRef, useState } from "react";
+import { FC, useState } from "react";
 import styles from "./SignUp.module.css";
 import Reaptcha from "reaptcha";
 import { AccountService } from "../../services/Account/Account.service";

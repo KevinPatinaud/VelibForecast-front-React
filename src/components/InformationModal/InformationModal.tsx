@@ -9,18 +9,21 @@ interface Props {
 
 const InformationModal: FC<Props> = (props) => {
   const [openned, setOpenned] = useState(true);
+  const [onCloseFnc] = useState(() => {
+    return props.onClose !== undefined ? props.onClose : () => {};
+  });
+  const [timeToDisplay] = useState(
+    props.timeToDisplay ? props.timeToDisplay : 60 * 1000
+  );
 
   useEffect(() => {
-    const timeout = setTimeout(
-      () => {
-        setOpenned(false);
-        if (props.onClose !== undefined) props.onClose();
-      },
-      props.timeToDisplay ? props.timeToDisplay : 60 * 1000
-    );
+    const timeout = setTimeout(() => {
+      if (onCloseFnc !== undefined) onCloseFnc();
+      setOpenned(false);
+    }, timeToDisplay);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [onCloseFnc, timeToDisplay]);
 
   return !openned ? (
     <></>
