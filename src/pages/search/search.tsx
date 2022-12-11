@@ -14,9 +14,9 @@ const Search: FC = () => {
   const [idStationSelected, setIdStationSelected] = useState(
     undefined as unknown as number
   );
+  const [stationService] = useState(new StationService());
 
   const intl = useIntl();
-  const stationService = new StationService();
 
   useEffect(() => {
     const loadStation = async () => {
@@ -25,7 +25,7 @@ const Search: FC = () => {
     };
 
     loadStation();
-  }, []);
+  }, [stationService]);
 
   useEffect(() => {
     const loadStates = async () => {
@@ -45,7 +45,7 @@ const Search: FC = () => {
       setListStation(stationsWithStates);
     };
     if (listStation.length !== 0) loadStates();
-  }, [listStation.length]);
+  }, [stationService, listStation, listStation.length]);
 
   let stationSelected = undefined;
   for (let i = 0; i < listStation.length; i++)

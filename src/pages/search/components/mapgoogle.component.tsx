@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useRef } from "react";
 import GoogleMapReact, { ClickEventValue } from "google-map-react";
 import { Station } from "../../../model/Station";
 import MarkerMap from "./markermap.helper";
@@ -51,7 +51,7 @@ const MapGoogle: FC<MapGoogleProps> = (props) => {
   const onClick = (e: ClickEventValue) => {
     if (
       /*  e.event.target.nodeName !== "DIV" || */
-      e.event.target.attributeStyleMap.size == 19
+      e.event.target.attributeStyleMap.size === 19
     ) {
       let nearestStation = props.stations[0];
       let distanceNearestMarker = -1;
