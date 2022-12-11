@@ -18,7 +18,7 @@ const InformationModal: FC<Props> = (props) => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (onCloseFnc !== undefined) onCloseFnc();
+      onCloseFnc();
       setOpenned(false);
     }, timeToDisplay);
 
