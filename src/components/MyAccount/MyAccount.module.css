@@ -1,0 +1,45 @@
+.MyAccount {
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  height: 100%;
+  line-height: 80px;
+}
+
+.accountMenu {
+  position: absolute;
+  top: 80px;
+  margin-top: 0px;
+  right: 0px;
+  margin-right: 5px;
+  width: 250px;
+  border-radius: 10px;
+  background-color: #f8f8f8;
+  border: solid 1px black;
+  z-index: 999;
+}
+
+.accountMenu ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  color: black;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+  text-decoration: bold;
+  text-align: center;
+  cursor: default;
+}
+
+.accountMenu ul li a {
+  color: black;
+  text-decoration: none;
+}
+.accountMenu ul li a:hover {
+  color: black;
+  text-decoration: underline;
+}
