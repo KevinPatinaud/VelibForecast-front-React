@@ -31,3 +31,14 @@
 .rightMenu > * {
   margin: 5px;
 }
+
+/* Smartphone adaptation */
+@media only screen and (max-width: 800px) {
+  .title {
+    margin-left: 10px;
+  }
+
+  .rightMenu {
+    margin-right: 10px;
+  }
+}
