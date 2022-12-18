@@ -32,7 +32,7 @@ export class StationService {
 
   async getStatus() {
     const httpResponse = await this.httpService.get(
-      "http://localhost:8080/stationStates"
+      "http://localhost:8083/stationStates"
     );
 
     const states = [];
