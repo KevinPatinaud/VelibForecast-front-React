@@ -6,7 +6,7 @@ export class StationService {
   httpService = new HttpService();
   async getStations() {
     const httpResponse = await this.httpService.get(
-      "http://localhost:8080/stations"
+      "http://localhost:8083/stations"
     );
 
     const stations = [];
