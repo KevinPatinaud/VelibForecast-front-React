@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Station } from "../../model/Station";
 import { StationService } from "../../services/Station/Station.service";
 import MapGoogle from "./components/mapgoogle.component";
@@ -14,14 +14,14 @@ const Search: FC = () => {
   const [idStationSelected, setIdStationSelected] = useState(
     undefined as unknown as number
   );
+  const statesLoaded = useRef(false);
   const [stationService] = useState(new StationService());
 
   const intl = useIntl();
 
   useEffect(() => {
     const loadStation = async () => {
-      const stations = await stationService.getStations();
-      setListStation(stations);
+      setListStation(await stationService.getStations());
     };
 
     loadStation();
@@ -42,10 +42,12 @@ const Search: FC = () => {
         });
         stationsWithStates.push(station);
       });
+      statesLoaded.current = true;
       setListStation(stationsWithStates);
     };
-    if (listStation.length !== 0) loadStates();
-  }, [stationService, listStation, listStation.length]);
+    if (listStation.length !== 0)
+      setTimeout(loadStates, statesLoaded.current ? 60 * 1000 : 0); // refresh stations states every minute
+  }, [stationService, listStation]);
 
   let stationSelected = undefined;
   for (let i = 0; i < listStation.length; i++)

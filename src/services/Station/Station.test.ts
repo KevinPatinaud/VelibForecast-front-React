@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import { getServerURL } from "../../helper/Utils";
 import { Account } from "../../model/Account";
 import { HttpService } from "../Http/Http.service";
 import { StationService } from "./Station.service";
@@ -46,7 +47,7 @@ describe("Station service", () => {
       const stations = await stationService.getStations();
 
       expect(httpService.prototype.get).toHaveBeenCalledWith(
-        window.location.origin + ":8083/stations"
+        getServerURL() + ":8083/stations"
       );
 
       expect(stations).toEqual([
@@ -111,7 +112,7 @@ describe("Station service", () => {
       const stations = await stationService.getStations();
 
       expect(httpService.prototype.get).toHaveBeenCalledWith(
-        window.location.origin + ":8083/stations"
+        getServerURL() + ":8083/stations"
       );
 
       expect(stations).toEqual([
@@ -187,7 +188,7 @@ describe("Station service", () => {
       const statuses = await stationService.getStatus();
 
       expect(httpService.prototype.get).toHaveBeenCalledWith(
-        window.location.origin + ":8083/stationStates"
+        getServerURL() + ":8083/stationStates"
       );
 
       expect(statuses).toEqual([
