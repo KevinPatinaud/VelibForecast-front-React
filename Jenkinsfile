@@ -3,8 +3,6 @@ pipeline {
   stages {
     stage('install') {
       steps {
-        sh 'kill -9 `ps -ef | grep node | grep -v grep | awk \'{ print $2 }\'` &'
-        sh 'rm -rf /var/NodeServer/velibforecast/build/'
         sh 'npm ci'
       }
     }
@@ -23,6 +21,8 @@ pipeline {
 
     stage('deploy') {
       steps {
+        sh 'kill -9 `ps -ef | grep node | grep -v grep | awk \'{ print $2 }\'` &'
+        sh 'rm -rf /var/NodeServer/velibforecast/build/'
         sh 'cp -r ${WORKSPACE}/build/ /var/NodeServer/velibforecast/build/'
       }
     }
