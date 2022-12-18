@@ -18,7 +18,7 @@ describe("Account service", () => {
       accountService.createAccount({} as Account, "captcha token");
 
       expect(httpService.prototype.post).toHaveBeenCalledWith(
-        "http://localhost:8083/createAccount",
+        window.location.origin + ":8083/createAccount",
         {
           account: {},
           captchaToken: "captcha token",

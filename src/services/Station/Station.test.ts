@@ -46,7 +46,7 @@ describe("Station service", () => {
       const stations = await stationService.getStations();
 
       expect(httpService.prototype.get).toHaveBeenCalledWith(
-        "http://localhost:8083/stations"
+        window.location.origin + ":8083/stations"
       );
 
       expect(stations).toEqual([
@@ -111,7 +111,7 @@ describe("Station service", () => {
       const stations = await stationService.getStations();
 
       expect(httpService.prototype.get).toHaveBeenCalledWith(
-        "http://localhost:8083/stations"
+        window.location.origin + ":8083/stations"
       );
 
       expect(stations).toEqual([
@@ -187,7 +187,7 @@ describe("Station service", () => {
       const statuses = await stationService.getStatus();
 
       expect(httpService.prototype.get).toHaveBeenCalledWith(
-        "http://localhost:8083/stationStates"
+        window.location.origin + ":8083/stationStates"
       );
 
       expect(statuses).toEqual([

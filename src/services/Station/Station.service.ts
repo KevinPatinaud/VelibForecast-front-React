@@ -6,7 +6,7 @@ export class StationService {
   httpService = new HttpService();
   async getStations() {
     const httpResponse = await this.httpService.get(
-      "http://localhost:8083/stations"
+      window.location.origin + ":8083/stations"
     );
 
     const stations = [];
@@ -32,7 +32,7 @@ export class StationService {
 
   async getStatus() {
     const httpResponse = await this.httpService.get(
-      "http://localhost:8083/stationStates"
+      window.location.origin + ":8083/stationStates"
     );
 
     const states = [];
