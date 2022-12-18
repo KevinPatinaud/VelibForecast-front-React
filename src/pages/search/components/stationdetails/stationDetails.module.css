@@ -63,10 +63,10 @@
 
 @media only screen and (max-width: 600px) {
   .detailTable tr th {
-    font-size: 8px;
+    font-size: 9px;
   }
 
   .detailTable tr td {
-    font-size: 8px;
+    font-size: 9px;
   }
 }
