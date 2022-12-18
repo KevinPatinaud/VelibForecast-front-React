@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { Station } from "../../../model/Station";
+import { Station } from "../../../../model/Station";
 import StationDetails from "./stationDetails";
 
 describe("<StationDetails>", () => {

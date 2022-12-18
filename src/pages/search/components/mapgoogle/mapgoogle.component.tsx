@@ -1,7 +1,7 @@
 import { FC, useRef } from "react";
 import GoogleMapReact, { ClickEventValue } from "google-map-react";
-import { Station } from "../../../model/Station";
-import MarkerMap from "./markermap.helper";
+import { Station } from "../../../../model/Station";
+import MarkerMap from "../markermap/markermap.helper";
 
 export interface MapGoogleProps {
   style?: React.CSSProperties | undefined;

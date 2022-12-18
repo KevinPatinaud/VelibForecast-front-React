@@ -1,9 +1,9 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { Station } from "../../model/Station";
 import { StationService } from "../../services/Station/Station.service";
-import MapGoogle from "./components/mapgoogle.component";
-import SearchBar from "./components/searchBar";
-import StationDetails from "./components/stationDetails";
+import MapGoogle from "./components/mapgoogle/mapgoogle.component";
+import SearchBar from "./components/searchbar/searchBar";
+import StationDetails from "./components/stationdetails/stationDetails";
 import styles from "./search.module.css";
 import { useIntl } from "react-intl";
 import { TranslationKeys } from "../../locales/constants";

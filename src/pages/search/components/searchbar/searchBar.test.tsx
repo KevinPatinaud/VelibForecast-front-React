@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
-import { Station } from "../../../model/Station";
+import { Station } from "../../../../model/Station";
 import SearchBar from "./searchBar";
 
 describe("<SearchBar/>", () => {

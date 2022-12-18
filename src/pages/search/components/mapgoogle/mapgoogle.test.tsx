@@ -1,11 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import googleMapReact from "google-map-react";
-import { Station } from "../../../model/Station";
+import { Station } from "../../../../model/Station";
+import MarkerMap from "../markermap/markermap.helper";
 import MapGoogle from "./mapgoogle.component";
-import MarkerMap from "./markermap.helper";
 
-jest.mock("./markermap.helper");
+jest.mock("../markermap/markermap.helper");
 
 const markerMapMocked = MarkerMap as jest.MockedClass<typeof MarkerMap>;
 
@@ -116,7 +116,7 @@ describe("<MapGoogle/>", () => {
             } as Station,
           ]}
           idStationSelected={2}
-          initZoom={0}
+          initZoom={20}
           initCenter={{
             lat: 0,
             lng: 0,
@@ -169,7 +169,7 @@ describe("<MapGoogle/>", () => {
   });
 
   describe("When its render with stations list and click on a station", () => {
-    it("should be ", async () => {
+    it("should call onclick function", async () => {
       const onStationClick = jest.fn();
 
       const scr = render(
@@ -198,7 +198,7 @@ describe("<MapGoogle/>", () => {
             } as Station,
           ]}
           idStationSelected={2}
-          initZoom={0}
+          initZoom={16}
           initCenter={{
             lat: 0,
             lng: 0,

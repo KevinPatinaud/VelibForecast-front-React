@@ -1,7 +1,7 @@
 import { faBicycle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FC } from "react";
-import { Station } from "../../../model/Station";
+import { Station } from "../../../../model/Station";
 import styles from "./stationDetails.module.css";
 
 export interface StationDetailsProps {

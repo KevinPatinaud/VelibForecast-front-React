@@ -4,46 +4,52 @@ import Search from "./search";
 import { StationService } from "../../services/Station/Station.service";
 import { Station } from "../../model/Station";
 import { StationState } from "../../model/StationState";
-import { MapGoogleProps } from "./components/mapgoogle.component";
-import { StationDetailsProps } from "./components/stationDetails";
-import { SearchBarProps } from "./components/searchBar";
+import { MapGoogleProps } from "./components/mapgoogle/mapgoogle.component";
+import { StationDetailsProps } from "./components/stationdetails/stationDetails";
+import { SearchBarProps } from "./components/searchbar/searchBar";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("../../services/Station/Station.service");
 
-jest.mock("./components/stationDetails", () => (props: StationDetailsProps) => {
-  return <div>{JSON.stringify(props.station)}</div>;
-});
+jest.mock(
+  "./components/stationdetails/stationDetails",
+  () => (props: StationDetailsProps) => {
+    return <div>{JSON.stringify(props.station)}</div>;
+  }
+);
 
 const mockChildComponent = jest.fn();
 
-jest.mock("./components/mapgoogle.component", () => (props: MapGoogleProps) => {
-  mockChildComponent(props);
+jest.mock(
+  "./components/mapgoogle/mapgoogle.component",
+  () => (props: MapGoogleProps) => {
+    mockChildComponent(props);
 
-  return (
-    <div
-      data-testid="GMap_Mock"
-      onClick={() =>
-        props.onStationClick({
-          id: 1,
-          name: "Benjamin Godard - Victor Hugo",
-          lat: 48.865983,
-          lng: 2.275725,
-          capacity: 35,
-          state: {
-            idStation: 1,
-            nmbBikeAvailable: 15,
-            nmbPlaceAvailable: 20,
-          } as StationState,
-        } as Station)
-      }
-    >
-      Google Map
-    </div>
-  );
-});
+    return (
+      <div
+        data-testid="GMap_Mock"
+        onClick={() =>
+          props.onStationClick({
+            id: 1,
+            name: "Benjamin Godard - Victor Hugo",
+            lat: 48.865983,
+            lng: 2.275725,
+            capacity: 35,
+            state: {
+              idStation: 1,
+              nmbBikeAvailable: 15,
+              nmbPlaceAvailable: 20,
+            } as StationState,
+          } as Station)
+        }
+      >
+        Google Map
+      </div>
+    );
+  }
+);
 
-jest.mock("./components/searchBar", () => (props: SearchBarProps) => {
+jest.mock("./components/searchbar/searchBar", () => (props: SearchBarProps) => {
   mockChildComponent(props);
 
   return (
