@@ -102,7 +102,7 @@ const SignUp: FC = () => {
         ></input>
       </div>
 
-      <div className={styles.information}>
+      <div className={styles.captcha}>
         <Reaptcha
           sitekey={process.env.REACT_APP_SITE_KEY}
           onVerify={(token) => {
