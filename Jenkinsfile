@@ -29,7 +29,7 @@ pipeline {
 
     stage('restart') {
       steps {
-        sh '''nohup node /var/NodeServer/server.js &
+        sh '''node /var/NodeServer/server.js &
 '''
       }
     }
