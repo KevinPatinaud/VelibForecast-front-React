@@ -3,9 +3,9 @@ pipeline {
   stages {
     stage('install') {
       steps {
+        sh 'kill -9 `ps -ef | grep node | grep -v grep | awk \'{ print $2 }\'` &'
         sh 'rm -rf /var/NodeServer/velibforecast/build/'
         sh 'npm ci'
-        sh 'kill -9 `ps -ef | grep node | grep -v grep | awk \'{ print $2 }\'`'
       }
     }
 
