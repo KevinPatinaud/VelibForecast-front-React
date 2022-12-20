@@ -33,13 +33,15 @@ Object {
                     fill="currentColor"
                   />
                 </svg>
-                 vélo(s) disponnible(s)
+                 
+                vélo(s) disponnible(s)
               </th>
               <th>
                 <b>
                   P
                 </b>
-                 place(s) disponnible(s)
+                 
+                place(s) disponnible(s)
               </th>
             </tr>
           </thead>
@@ -118,13 +120,15 @@ Object {
                   fill="currentColor"
                 />
               </svg>
-               vélo(s) disponnible(s)
+               
+              vélo(s) disponnible(s)
             </th>
             <th>
               <b>
                 P
               </b>
-               place(s) disponnible(s)
+               
+              place(s) disponnible(s)
             </th>
           </tr>
         </thead>
