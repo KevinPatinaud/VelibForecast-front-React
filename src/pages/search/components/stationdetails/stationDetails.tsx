@@ -49,7 +49,7 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
             <td className={styles.firstCol}>
               {intl
                 .formatMessage({ id: TranslationKeys.IN_X_HOURS })
-                .replace("${X}", "2")}
+                .replace("{X}", "2")}
             </td>
             <td></td>
             <td></td>
@@ -58,7 +58,7 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
             <td className={styles.firstCol}>
               {intl
                 .formatMessage({ id: TranslationKeys.IN_X_HOURS })
-                .replace("${X}", "3")}
+                .replace("{X}", "3")}
             </td>
             <td></td>
             <td></td>

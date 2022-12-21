@@ -7,7 +7,7 @@ export const en: Translation = {
   [TranslationKeys.SPACE_AVAILABLE]: "space available",
   [TranslationKeys.CURRENTLY]: "Currently",
   [TranslationKeys.IN_1_HOUR]: "In 1 hour",
-  [TranslationKeys.IN_X_HOURS]: "In ${X} hours",
+  [TranslationKeys.IN_X_HOURS]: "In {X} hours",
   [TranslationKeys.SIGN_UP]: "Sign up",
   [TranslationKeys.SIGN_IN]: "Log in",
 
