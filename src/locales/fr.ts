@@ -18,7 +18,7 @@ export const fr: Translation = {
   [TranslationKeys.PASSWORD_CONFIRM]: "Confirmez votre mot de passe",
   [TranslationKeys.VALIDATE]: "Valider",
   [TranslationKeys.PLEASE_WELL_COMPLETE_FORM]:
-    "Merci de completeer correctement le formulaire",
+    "Merci de completer correctement le formulaire",
   [TranslationKeys.PASSWORD_ARE_DIFFERENT]:
     "Les deux mots de passe sont différents",
 };

@@ -36,8 +36,7 @@ describe("Sign up page", () => {
   describe("When the sign in page render", () => {
     it("should display the formular", () => {
       render(<SignUp />, { wrapper });
-      expect(screen.queryByText("Create your account")).not.toBeNull();
-      expect(screen.queryByText("Display name")).not.toBeNull();
+      expect(screen.queryByText("Créer mon compte")).not.toBeNull();
       expect(screen.queryByText("Email")).not.toBeNull();
       expect(screen.queryAllByRole("presentation")).not.toBeNull();
     });
@@ -46,7 +45,7 @@ describe("Sign up page", () => {
   describe("When the user didn't complete the formular and click on submit", () => {
     it("should display an error message", () => {
       render(<SignUp />, { wrapper });
-      userEvent.click(screen.getByText("Sign up"));
+      userEvent.click(screen.getByText("Valider"));
 
       expect(
         screen.queryByText("Merci de completer correctement le formulaire")
@@ -58,7 +57,7 @@ describe("Sign up page", () => {
   describe("When the user close the information modal", () => {
     it("should hidde the modal", () => {
       const scr = render(<SignUp />, { wrapper });
-      userEvent.click(screen.getByText("Sign up"));
+      userEvent.click(screen.getByText("Valider"));
 
       expect(
         screen.queryByText("Merci de completer correctement le formulaire")
@@ -94,18 +93,16 @@ describe("Sign up page", () => {
     it("should send the formular to the back-end", () => {
       render(<SignUp />, { wrapper });
 
-      userEvent.type(screen.getByTestId("input_displayName"), "Benabar");
       userEvent.type(screen.getByTestId("input_email"), "Benabar@musique.fr");
       userEvent.type(screen.getByTestId("input_password"), "myPassword");
       userEvent.type(screen.getByTestId("input_password2"), "myPassword");
 
       userEvent.click(screen.getByTestId("reaptcha_onVerify"));
 
-      userEvent.click(screen.getByText("Sign up"));
+      userEvent.click(screen.getByText("Valider"));
 
       expect(accountServiceMocked.prototype.createAccount).toBeCalledWith(
         {
-          displayName: "Benabar",
           email: "Benabar@musique.fr",
           password: "myPassword",
         },
@@ -119,14 +116,14 @@ describe("Sign up page", () => {
   });
 
   describe("When the captcha is expired", () =>
-    it("", () => {
+    it("should displayed the default warning message", () => {
       render(<SignUp />, { wrapper });
 
       userEvent.click(screen.getByTestId("reaptcha_onVerify"));
 
       userEvent.click(screen.getByTestId("reaptcha_onExpire"));
 
-      userEvent.click(screen.getByText("Sign up"));
+      userEvent.click(screen.getByText("Valider"));
 
       expect(
         screen.queryByText("Merci de completer correctement le formulaire")

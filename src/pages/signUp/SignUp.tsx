@@ -10,7 +10,6 @@ import { TranslationKeys } from "../../locales/constants";
 const accountService = new AccountService();
 
 const SignUp: FC = () => {
-  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -20,8 +19,7 @@ const SignUp: FC = () => {
   const intl = useIntl();
 
   const formIsValide = () => {
-    return displayName !== "" &&
-      email !== "" &&
+    return email !== "" &&
       email
         .toLowerCase()
         .match(
@@ -40,7 +38,6 @@ const SignUp: FC = () => {
     if (formIsValide()) {
       accountService.createAccount(
         {
-          displayName: displayName,
           email: email,
           password: password,
         } as Account,
