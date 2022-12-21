@@ -4,9 +4,9 @@ import RouterProvider from "./Router";
 
 const AppProviders: FC<{ children: JSX.Element }> = ({ children }) => {
   return (
-    <RouterProvider>
-      <IntlProvider>{children}</IntlProvider>
-    </RouterProvider>
+    <IntlProvider>
+      <RouterProvider>{children}</RouterProvider>
+    </IntlProvider>
   );
 };
 

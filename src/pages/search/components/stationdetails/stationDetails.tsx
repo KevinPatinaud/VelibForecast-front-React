@@ -39,17 +39,27 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
             <td>{props.station.state?.nmbPlaceAvailable}</td>
           </tr>
           <tr>
-            <td className={styles.firstCol}>Dans 1 heure</td>
+            <td className={styles.firstCol}>
+              {intl.formatMessage({ id: TranslationKeys.IN_1_HOUR })}
+            </td>
             <td></td>
             <td></td>
           </tr>
           <tr className={styles.highlightLine}>
-            <td className={styles.firstCol}>Dans 2 heures</td>
+            <td className={styles.firstCol}>
+              {intl
+                .formatMessage({ id: TranslationKeys.IN_X_HOURS })
+                .replace("${X}", "2")}
+            </td>
             <td></td>
             <td></td>
           </tr>
           <tr>
-            <td className={styles.firstCol}>Dans 3 heures</td>
+            <td className={styles.firstCol}>
+              {intl
+                .formatMessage({ id: TranslationKeys.IN_X_HOURS })
+                .replace("${X}", "3")}
+            </td>
             <td></td>
             <td></td>
           </tr>
