@@ -33,13 +33,15 @@ Object {
                     fill="currentColor"
                   />
                 </svg>
-                 vélo(s) disponnible(s)
+                 
+                vélo(s) disponnible(s)
               </th>
               <th>
                 <b>
                   P
                 </b>
-                 place(s) disponnible(s)
+                 
+                place(s) disponnible(s)
               </th>
             </tr>
           </thead>
@@ -70,7 +72,7 @@ Object {
               <td
                 class="firstCol"
               >
-                Dans 2 heures
+                Dans 2 heure
               </td>
               <td />
               <td />
@@ -79,7 +81,7 @@ Object {
               <td
                 class="firstCol"
               >
-                Dans 3 heures
+                Dans 3 heure
               </td>
               <td />
               <td />
@@ -118,13 +120,15 @@ Object {
                   fill="currentColor"
                 />
               </svg>
-               vélo(s) disponnible(s)
+               
+              vélo(s) disponnible(s)
             </th>
             <th>
               <b>
                 P
               </b>
-               place(s) disponnible(s)
+               
+              place(s) disponnible(s)
             </th>
           </tr>
         </thead>
@@ -155,7 +159,7 @@ Object {
             <td
               class="firstCol"
             >
-              Dans 2 heures
+              Dans 2 heure
             </td>
             <td />
             <td />
@@ -164,7 +168,7 @@ Object {
             <td
               class="firstCol"
             >
-              Dans 3 heures
+              Dans 3 heure
             </td>
             <td />
             <td />

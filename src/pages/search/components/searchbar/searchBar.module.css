@@ -8,7 +8,7 @@
   height: 30px;
   border-radius: 25px;
   border: 2px solid black;
-  padding: 1px 10px;
+  padding: 1px 35px 1px 10px;
 }
 
 .choicesList {
@@ -30,4 +30,15 @@
 
 .choice {
   cursor: pointer;
+}
+
+/* Smartphone adaptation */
+@media only screen and (max-width: 800px) {
+  .searchBar {
+    width: 85%;
+  }
+
+  .choicesList {
+    width: 85%;
+  }
 }

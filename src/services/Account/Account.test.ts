@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import { getServerURL } from "../../helper/Utils";
 import { Account } from "../../model/Account";
 import { HttpService } from "../Http/Http.service";
 import { AccountService } from "./Account.service";
@@ -18,7 +19,7 @@ describe("Account service", () => {
       accountService.createAccount({} as Account, "captcha token");
 
       expect(httpService.prototype.post).toHaveBeenCalledWith(
-        "http://localhost:8080/createAccount",
+        getServerURL() + ":8083/createAccount",
         {
           account: {},
           captchaToken: "captcha token",

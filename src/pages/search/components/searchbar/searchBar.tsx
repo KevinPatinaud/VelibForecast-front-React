@@ -1,7 +1,7 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FC, useState } from "react";
-import { Station } from "../../../model/Station";
+import { Station } from "../../../../model/Station";
 import styles from "./searchBar.module.css";
 
 export interface SearchBarProps {

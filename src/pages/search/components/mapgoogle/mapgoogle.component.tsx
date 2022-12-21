@@ -1,7 +1,7 @@
 import { FC, useRef } from "react";
 import GoogleMapReact, { ClickEventValue } from "google-map-react";
-import { Station } from "../../../model/Station";
-import MarkerMap from "./markermap.helper";
+import { Station } from "../../../../model/Station";
+import MarkerMap from "../markermap/markermap.helper";
 
 export interface MapGoogleProps {
   style?: React.CSSProperties | undefined;
@@ -24,6 +24,7 @@ const markermap = new MarkerMap();
 const MapGoogle: FC<MapGoogleProps> = (props) => {
   const map = useRef(undefined as any);
   const maps = useRef(undefined as any);
+  const zoom = useRef(props.initZoom);
 
   const prevMarkersRef = useRef<any>([]);
 
@@ -49,10 +50,7 @@ const MapGoogle: FC<MapGoogleProps> = (props) => {
   };
 
   const onClick = (e: ClickEventValue) => {
-    if (
-      /*  e.event.target.nodeName !== "DIV" || */
-      e.event.target.attributeStyleMap.size === 19
-    ) {
+    if (e.event.target.attributeStyleMap.size === 19 && zoom.current > 14) {
       let nearestStation = props.stations[0];
       let distanceNearestMarker = -1;
 
@@ -101,6 +99,7 @@ const MapGoogle: FC<MapGoogleProps> = (props) => {
         }}
         onClick={onClick}
         onChange={(e) => {
+          zoom.current = e.zoom;
           if (e.zoom > 14) {
             generateMarkers();
           } else {

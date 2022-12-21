@@ -4,20 +4,22 @@ import Reaptcha from "reaptcha";
 import { AccountService } from "../../services/Account/Account.service";
 import { Account } from "../../model/Account";
 import InformationModal from "../../components/InformationModal/InformationModal";
+import { useIntl } from "react-intl";
+import { TranslationKeys } from "../../locales/constants";
 
 const accountService = new AccountService();
 
 const SignUp: FC = () => {
-  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const intl = useIntl();
+
   const formIsValide = () => {
-    return displayName !== "" &&
-      email !== "" &&
+    return email !== "" &&
       email
         .toLowerCase()
         .match(
@@ -36,33 +38,25 @@ const SignUp: FC = () => {
     if (formIsValide()) {
       accountService.createAccount(
         {
-          displayName: displayName,
           email: email,
           password: password,
         } as Account,
         captchaToken
       );
     } else {
-      setErrorMessage("Merci de completer correctement le formulaire");
+      setErrorMessage(
+        intl.formatMessage({ id: TranslationKeys.PLEASE_WELL_COMPLETE_FORM })
+      );
     }
   };
 
   return (
     <div className={styles.pageContent}>
-      <div className={styles.pageTitle}>Create your account</div>
-      <div className={styles.information}>
-        <label>Display name</label>
-        <input
-          data-testid="input_displayName"
-          className={styles.inputText}
-          value={displayName}
-          onChange={(e) => {
-            setDisplayName(e.target.value);
-          }}
-        ></input>
+      <div className={styles.pageTitle}>
+        {intl.formatMessage({ id: TranslationKeys.CREATE_YOUR_ACCOUNT })}
       </div>
       <div className={styles.information}>
-        <label>Email</label>
+        <label>{intl.formatMessage({ id: TranslationKeys.E_MAIL })}</label>
         <input
           data-testid="input_email"
           type="email"
@@ -74,7 +68,7 @@ const SignUp: FC = () => {
         ></input>
       </div>
       <div className={styles.information}>
-        <label>Password (au moins 8 caractères)</label>
+        <label>{intl.formatMessage({ id: TranslationKeys.PASSWORD })}</label>
         <input
           data-testid="input_password"
           type="password"
@@ -86,7 +80,9 @@ const SignUp: FC = () => {
         ></input>
       </div>
       <div className={styles.information}>
-        <label>Confirm your password</label>
+        <label>
+          {intl.formatMessage({ id: TranslationKeys.PASSWORD_CONFIRM })}
+        </label>
         <input
           data-testid="input_password2"
           type="password"
@@ -97,12 +93,16 @@ const SignUp: FC = () => {
           }}
           onBlur={(e) => {
             if (password !== password2)
-              setErrorMessage("Les deux mots de passe sont différents");
+              setErrorMessage(
+                intl.formatMessage({
+                  id: TranslationKeys.PASSWORD_ARE_DIFFERENT,
+                })
+              );
           }}
         ></input>
       </div>
 
-      <div className={styles.information}>
+      <div className={styles.captcha}>
         <Reaptcha
           sitekey={process.env.REACT_APP_SITE_KEY}
           onVerify={(token) => {
@@ -115,7 +115,7 @@ const SignUp: FC = () => {
       </div>
 
       <button className={styles.signUpBtn} onClick={submitForm}>
-        Sign up
+        {intl.formatMessage({ id: TranslationKeys.VALIDATE })}
       </button>
 
       {errorMessage && (

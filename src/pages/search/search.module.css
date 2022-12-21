@@ -27,3 +27,24 @@
   font-size: large;
   margin: 30px auto;
 }
+
+@media only screen and (max-width: 800px) {
+  .pageContent {
+    display: block;
+    margin: 10px;
+  }
+
+  .divContentHalfWidthLeft {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+  }
+
+  .divContentHalfWidthRight {
+    margin: 0px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    width: inherit;
+    height: 100%;
+  }
+}
