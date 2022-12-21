@@ -2,7 +2,7 @@ import { FC } from "react";
 import styles from "./SignUp.module.css";
 import { useIntl } from "react-intl";
 import { TranslationKeys } from "../../locales/constants";
-import FormSignUp from "./components/FormSignUp";
+import FormSignUp from "./components/FormSignUp/FormSignUp";
 
 const SignUp: FC = () => {
   const intl = useIntl();

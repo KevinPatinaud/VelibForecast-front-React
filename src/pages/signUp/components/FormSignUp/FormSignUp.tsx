@@ -2,10 +2,10 @@ import { FC, useState } from "react";
 import { useIntl } from "react-intl";
 import Reaptcha from "reaptcha";
 import styles from "./FormSignUp.module.css";
-import { TranslationKeys } from "../../../locales/constants";
-import { Account } from "../../../model/Account";
-import { AccountService } from "../../../services/Account/Account.service";
-import InformationModal from "../../../components/InformationModal/InformationModal";
+import { TranslationKeys } from "../../../../locales/constants";
+import { Account } from "../../../../model/Account";
+import { AccountService } from "../../../../services/Account/Account.service";
+import InformationModal from "../../../../components/InformationModal/InformationModal";
 
 const FormSignUp: FC = () => {
   const [email, setEmail] = useState("");

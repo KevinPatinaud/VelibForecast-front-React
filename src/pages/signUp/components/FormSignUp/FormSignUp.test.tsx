@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Props as ReaptchaProps } from "reaptcha";
-import { AccountService } from "../../../services/Account/Account.service";
-import wrapper from "../../../helper/test-context-builder";
+import wrapper from "../../../../helper/test-context-builder";
+import { AccountService } from "../../../../services/Account/Account.service";
 import FormSignUp from "./FormSignUp";
 
-jest.mock("../../../services/Account/Account.service");
+jest.mock("../../../../services/Account/Account.service");
 
 const accountServiceMocked = AccountService as jest.MockedClass<
   typeof AccountService
