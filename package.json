@@ -18,6 +18,7 @@
     "react": "^18.2.0",
     "react-circle-flags": "^0.0.18",
     "react-dom": "^18.2.0",
+    "react-facebook-login": "^4.1.1",
     "react-google-recaptcha": "^2.1.0",
     "react-intl": "^6.2.4",
     "react-router-dom": "^6.4.4",
@@ -57,6 +58,7 @@
     "@types/axios": "^0.14.0",
     "@types/google-map-react": "^2.1.7",
     "@types/jest": "^29.2.4",
+    "@types/react-facebook-login": "^4.1.5",
     "@types/react-google-recaptcha": "^2.1.5"
   },
   "jest": {
@@ -79,6 +81,8 @@
         "functions": 100
       }
     },
-    "coveragePathIgnorePatterns": [".*__snapshots__/.*"] 
+    "coveragePathIgnorePatterns": [
+      ".*__snapshots__/.*"
+    ]
   }
 }

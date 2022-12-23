@@ -11,7 +11,13 @@ const accountServiceMocked = AccountService as jest.MockedClass<
   typeof AccountService
 >;
 
-accountServiceMocked.prototype.createAccount.mockResolvedValue();
+const resCreateMailUser = Promise.resolve({
+  data: true,
+});
+
+accountServiceMocked.prototype.createAccount = jest
+  .fn()
+  .mockReturnValue(resCreateMailUser);
 
 const mockChildComponent = jest.fn();
 
@@ -35,7 +41,7 @@ jest.mock("reaptcha", () => (props: ReaptchaProps) => {
 describe("Sign up page", () => {
   describe("When the sign in page render", () => {
     it("should display the formular", () => {
-      render(<FormSignUp />, { wrapper });
+      render(<FormSignUp onSucced={jest.fn} />, { wrapper });
       expect(screen.queryByText("Email")).not.toBeNull();
       expect(
         screen.queryByText("Mot de passe (doit contenir au moins 8 caractères)")
@@ -47,7 +53,7 @@ describe("Sign up page", () => {
 
   describe("When the user didn't complete the formular and click on submit", () => {
     it("should display an error message", () => {
-      render(<FormSignUp />, { wrapper });
+      render(<FormSignUp onSucced={jest.fn} />, { wrapper });
       userEvent.click(screen.getByText("Valider"));
 
       expect(
@@ -59,7 +65,9 @@ describe("Sign up page", () => {
 
   describe("When the user close the information modal", () => {
     it("should hidde the modal", () => {
-      const scr = render(<FormSignUp />, { wrapper });
+      const scr = render(<FormSignUp onSucced={jest.fn} />, {
+        wrapper,
+      });
       userEvent.click(screen.getByText("Valider"));
 
       expect(
@@ -78,7 +86,9 @@ describe("Sign up page", () => {
 
   describe("When the user set two different password", () => {
     it("should display an specific error message", async () => {
-      const scr = render(<FormSignUp />, { wrapper });
+      const scr = render(<FormSignUp onSucced={jest.fn} />, {
+        wrapper,
+      });
 
       userEvent.type(screen.getByTestId("input_password"), "myPassword");
 
@@ -94,7 +104,7 @@ describe("Sign up page", () => {
   });
   describe("When the user well complet the formular and click on submit", () => {
     it("should send the formular to the back-end", () => {
-      render(<FormSignUp />, { wrapper });
+      render(<FormSignUp onSucced={jest.fn} />, { wrapper });
 
       userEvent.type(screen.getByTestId("input_email"), "Benabar@musique.fr");
       userEvent.type(screen.getByTestId("input_password"), "myPassword");
@@ -120,7 +130,7 @@ describe("Sign up page", () => {
 
   describe("When the captcha is expired", () =>
     it("should displayed the default warning message", () => {
-      render(<FormSignUp />, { wrapper });
+      render(<FormSignUp onSucced={jest.fn} />, { wrapper });
 
       userEvent.click(screen.getByTestId("reaptcha_onVerify"));
 

@@ -7,12 +7,17 @@ import { Account } from "../../../../model/Account";
 import { AccountService } from "../../../../services/Account/Account.service";
 import InformationModal from "../../../../components/InformationModal/InformationModal";
 
-const FormSignUp: FC = () => {
+export interface FormSignUpProps {
+  onSucced: () => void;
+}
+
+const FormSignUp: FC<FormSignUpProps> = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [mailAlreadyExist, setMailAlreadyExist] = useState(false);
 
   const intl = useIntl();
 
@@ -34,15 +39,21 @@ const FormSignUp: FC = () => {
       : false;
   };
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (formIsValide()) {
-      accountService.createAccount(
+      const response = await accountService.createAccount(
         {
           email: email,
           password: password,
         } as Account,
         captchaToken
       );
+
+      if (response.data) {
+        props.onSucced();
+      } else {
+        setErrorMessage("Somethings goes wrong when we try to save the user !");
+      }
     } else {
       setErrorMessage(
         intl.formatMessage({ id: TranslationKeys.PLEASE_WELL_COMPLETE_FORM })
@@ -54,6 +65,11 @@ const FormSignUp: FC = () => {
     <>
       <div className={styles.information}>
         <label>{intl.formatMessage({ id: TranslationKeys.E_MAIL })}</label>
+        {mailAlreadyExist && (
+          <label className={styles.alert}>
+            Be careful this mail is already attached to an account
+          </label>
+        )}
         <input
           data-testid="input_email"
           type="email"
@@ -61,6 +77,10 @@ const FormSignUp: FC = () => {
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
+          }}
+          onBlur={async () => {
+            const response = await accountService.isAccountExist(email);
+            setMailAlreadyExist(response.data);
           }}
         ></input>
       </div>
