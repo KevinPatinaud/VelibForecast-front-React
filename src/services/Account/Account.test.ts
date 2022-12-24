@@ -12,19 +12,49 @@ httpService.prototype.post = jest
   .fn()
   .mockReturnValue({} as AxiosResponse<any, any>);
 
+httpService.prototype.get = jest
+  .fn()
+  .mockReturnValue({} as AxiosResponse<any, any>);
+
 describe("Account service", () => {
-  describe("when service is called", () => {
+  describe("when createAccount service is called", () => {
     it("should call http service", () => {
       const accountService = new AccountService();
       accountService.createAccount({} as Account, "captcha token");
 
       expect(httpService.prototype.post).toHaveBeenCalledWith(
-        getServerURL() + ":8083/createAccount",
+        getServerURL() + ":8083/MailUser",
         {
-          account: {},
+          email: undefined,
+          password: undefined,
           captchaToken: "captcha token",
         }
       );
+    });
+
+    describe("when createFacebookAccount service is called", () => {
+      it("should call http service", () => {
+        const accountService = new AccountService();
+        accountService.createFacebookAccount("Token access");
+
+        expect(httpService.prototype.post).toHaveBeenCalledWith(
+          getServerURL() + ":8083/FacebookUser",
+          {
+            accessToken: "Token access",
+          }
+        );
+      });
+    });
+
+    describe("when isAccountExist service is called", () => {
+      it("should call http service", () => {
+        const accountService = new AccountService();
+        accountService.isAccountExist("My_test_id");
+
+        expect(httpService.prototype.get).toHaveBeenCalledWith(
+          getServerURL() + ":8083/MailUserExist?id=My_test_id"
+        );
+      });
     });
   });
 });

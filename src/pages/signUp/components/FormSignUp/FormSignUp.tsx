@@ -41,7 +41,7 @@ const FormSignUp: FC<FormSignUpProps> = (props) => {
 
   const submitForm = async () => {
     if (formIsValide()) {
-      const response = await accountService.createAccount(
+      await accountService.createAccount(
         {
           email: email,
           password: password,
@@ -49,11 +49,7 @@ const FormSignUp: FC<FormSignUpProps> = (props) => {
         captchaToken
       );
 
-      if (response.data) {
-        props.onSucced();
-      } else {
-        setErrorMessage("Somethings goes wrong when we try to save the user !");
-      }
+      props.onSucced();
     } else {
       setErrorMessage(
         intl.formatMessage({ id: TranslationKeys.PLEASE_WELL_COMPLETE_FORM })
@@ -66,21 +62,24 @@ const FormSignUp: FC<FormSignUpProps> = (props) => {
       <div className={styles.information}>
         <label>{intl.formatMessage({ id: TranslationKeys.E_MAIL })}</label>
         {mailAlreadyExist && (
-          <label className={styles.alert}>
-            Be careful this mail is already attached to an account
-          </label>
+          <div data-testid="label_mail_already_exist" className={styles.alert}>
+            This mail is already attached to an account
+          </div>
         )}
         <input
           data-testid="input_email"
           type="email"
           className={styles.inputText}
           value={email}
-          onChange={(e) => {
+          onChange={async (e) => {
             setEmail(e.target.value);
-          }}
-          onBlur={async () => {
-            const response = await accountService.isAccountExist(email);
-            setMailAlreadyExist(response.data);
+            if (e.target.value.length > 5) {
+              setMailAlreadyExist(
+                await accountService.isAccountExist(e.target.value)
+              );
+            } else {
+              setMailAlreadyExist(false);
+            }
           }}
         ></input>
       </div>

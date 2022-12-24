@@ -7,6 +7,7 @@ import { Route, Routes } from "react-router-dom";
 
 const SignUp = React.lazy(() => import("./pages/signUp/SignUp"));
 const SignIn = React.lazy(() => import("./pages/SignIn/SignIn"));
+const NotFound = React.lazy(() => import("./pages/notFound/NotFound"));
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/" element={<Search />} />
             <Route path="signUp" element={<SignUp />} />
             <Route path="signIn" element={<SignIn />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Body>
       </>

@@ -18,6 +18,15 @@ const SignUp: FC = () => {
           console.log("User well created in the database");
         }}
       />
+      <div className={styles.boxOrSocial}>
+        <div>
+          <hr className={styles.hrSocial} />
+        </div>
+        <p className={styles.textOrSocial}>OR SIGN UP WITH</p>
+        <div>
+          <hr className={styles.hrSocial} />
+        </div>
+      </div>
       <FaceBookLog />
     </div>
   );

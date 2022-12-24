@@ -147,7 +147,16 @@ describe("Station service", () => {
         data: [
           {
             id: 0,
-            stationCode: 16107,
+            station: {
+              stationCode: 16107,
+              states: null,
+              timeStampInformationGot: 0,
+              name: null,
+              latitude: 0.0,
+              longitude: 0.0,
+              capacity: 0,
+              rentalMethods: null,
+            },
             numBikesAvailable: 3,
             numBikesAvailableTypesMechanical: 1,
             numBikesAvailableTypesEbike: 2,
@@ -159,7 +168,16 @@ describe("Station service", () => {
           },
           {
             id: 0,
-            stationCode: 31104,
+            station: {
+              stationCode: 31104,
+              states: null,
+              timeStampInformationGot: 0,
+              name: null,
+              latitude: 0.0,
+              longitude: 0.0,
+              capacity: 0,
+              rentalMethods: null,
+            },
             numBikesAvailable: 19,
             numBikesAvailableTypesMechanical: 10,
             numBikesAvailableTypesEbike: 9,
@@ -171,7 +189,16 @@ describe("Station service", () => {
           },
           {
             id: 0,
-            stationCode: 11104,
+            station: {
+              stationCode: 11104,
+              states: null,
+              timeStampInformationGot: 0,
+              name: null,
+              latitude: 0.0,
+              longitude: 0.0,
+              capacity: 0,
+              rentalMethods: null,
+            },
             numBikesAvailable: 5,
             numBikesAvailableTypesMechanical: 1,
             numBikesAvailableTypesEbike: 4,
