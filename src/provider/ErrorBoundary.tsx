@@ -22,7 +22,7 @@ class ErrorBoundary extends React.Component<IProps, IState> {
 
   render() {
     if (this.state.hasError) {
-      return <h1>Something went wrong.</h1>;
+      return <></>;
     }
 
     return this.props.children;
