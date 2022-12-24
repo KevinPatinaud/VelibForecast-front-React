@@ -39,7 +39,6 @@ describe("Error Boundary", () => {
       </ErrorBoundary>
     );
 
-    expect(scr.getByText("Something went wrong.")).toBeInTheDocument();
     expect(window.location.reload).toHaveBeenCalled();
   });
 });
