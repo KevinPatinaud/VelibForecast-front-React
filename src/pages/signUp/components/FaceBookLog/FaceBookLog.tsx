@@ -18,7 +18,7 @@ const FaceBookLog = () => {
 
   return (
     <FacebookLogin
-      appId="684735199895720" // DEV : 684735199895720 /  PROD : 538093644868800
+      appId={process.env.FACEBOOK_APP_ID as string}
       fields="name,email"
       callback={callback}
       onFailure={onFailure}
