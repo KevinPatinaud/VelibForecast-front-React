@@ -58,6 +58,8 @@ describe("<FaceBookLog>", () => {
       userEvent.click(scr.getByTestId("FacebookLogin"));
 
       expect(logSpy).toHaveBeenCalledWith({ accessToken: "accessToken" });
+      
+      expect(accountServiceMocked.prototype.createFacebookAccount).toHaveBeenCalledWith({});
     });
   });
 
