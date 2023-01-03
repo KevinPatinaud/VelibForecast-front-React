@@ -17,6 +17,7 @@ const FaceBookLog = () => {
   };
 
   console.log("______________________________");
+  console.log(process.env.NODE_ENV);
   console.log(process.env.REACT_APP_FB_ID);
   console.log("______________________________");
 
