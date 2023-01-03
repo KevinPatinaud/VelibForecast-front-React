@@ -1,3 +1,3 @@
 export const getServerURL = () => {
-  return "http://" + window.location.hostname;
+  return window.location.protocol + "//" + window.location.hostname;
 };
