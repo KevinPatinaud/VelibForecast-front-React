@@ -16,9 +16,13 @@ const FaceBookLog = () => {
     console.log("fail");
   };
 
+  console.log("______________________________");
+  console.log(process.env.REACT_APP_FB_ID);
+  console.log("______________________________");
+
   return (
     <FacebookLogin
-      appId={process.env.FACEBOOK_APP_ID as string}
+      appId={process.env.REACT_APP_FB_ID as string}
       fields="name,email"
       callback={callback}
       onFailure={onFailure}
