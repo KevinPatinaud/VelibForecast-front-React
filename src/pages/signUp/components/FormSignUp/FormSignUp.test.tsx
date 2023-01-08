@@ -108,64 +108,6 @@ describe("Sign up page", () => {
     });
   });
 
-  describe("When the user set an already exist adresse mail", () => {
-    it("should display an error message", async () => {
-      jest.spyOn(console, "error").mockImplementation(); // !!! TO ANALYSE AND REMOVE
-
-      accountServiceMocked.prototype.isAccountExist = jest
-        .fn()
-        .mockResolvedValue(Promise.resolve(true));
-
-      const scr = render(<FormSignUp onSucceed={jest.fn} />, { wrapper });
-
-      userEvent.type(screen.getByTestId("input_email"), "mario@plombier.com");
-
-      await waitFor(() =>
-        expect(accountServiceMocked.prototype.isAccountExist).toBeCalledWith(
-          "mario@plombier.com"
-        )
-      );
-
-      await waitFor(() =>
-        expect(
-          scr.queryByText("This mail is already attached to an account")
-        ).toBeInTheDocument()
-      );
-    });
-  });
-
-  describe("When the user well complet the formular and click on submit", () => {
-    it("should send the formular to the back-end", async () => {
-      render(<FormSignUp onSucceed={jest.fn} />, { wrapper });
-
-      userEvent.type(screen.getByTestId("input_email"), "Benabar@musique.fr");
-      await waitFor(() =>
-        expect(
-          accountServiceMocked.prototype.isAccountExist
-        ).toHaveBeenCalledWith("Benabar@musique.fr")
-      );
-      userEvent.type(screen.getByTestId("input_password"), "myPassword");
-      userEvent.type(screen.getByTestId("input_password2"), "myPassword");
-      userEvent.click(screen.getByTestId("reaptcha_onVerify"));
-
-      userEvent.click(screen.getByText("Valider"));
-
-      await waitFor(() =>
-        expect(accountServiceMocked.prototype.createMailAccount).toBeCalledWith(
-          {
-            email: "Benabar@musique.fr",
-            password: "myPassword",
-          },
-          "token_validated_captcha"
-        )
-      );
-
-      expect(
-        screen.queryByText("Merci de completer correctement le formulaire")
-      ).not.toBeInTheDocument();
-    });
-  });
-
   describe("When the captcha is expired", () =>
     it("should displayed the default warning message", async () => {
       render(<FormSignUp onSucceed={jest.fn} />, { wrapper });

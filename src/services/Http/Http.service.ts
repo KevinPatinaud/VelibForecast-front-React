@@ -30,7 +30,6 @@ export class HttpService {
   }
 
   isAuthTokenSetted() {
-    console.log(axios.defaults.headers.common["Authorization"]);
     return axios.defaults.headers.common["Authorization"] != null;
   }
 }
