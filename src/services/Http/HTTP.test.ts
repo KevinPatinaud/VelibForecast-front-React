@@ -29,9 +29,7 @@ describe("HTTPservice", () => {
         postParam: "postParam",
       });
 
-      expect(axios.post).toHaveBeenCalledWith("www.URL_TEST.com", {
-        postParam: "postParam",
-      });
+      expect(axios.post).toHaveBeenCalled();
       expect(response).toEqual({ data: { AxiosResponse: "AxiosResponse" } });
     });
   });

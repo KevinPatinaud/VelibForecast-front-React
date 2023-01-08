@@ -1,4 +1,3 @@
-import { useState } from "react";
 import FacebookLogin, {
   ReactFacebookFailureResponse,
   ReactFacebookLoginInfo,
@@ -13,9 +12,7 @@ const FaceBookSignIn = (props: FaceBookLogProps) => {
   const accountService = new AccountService();
 
   const callback = async (userInfo: ReactFacebookLoginInfo) => {
-    const result = await accountService.connectFacebookAccount(
-      userInfo.accessToken
-    );
+    await accountService.connectFacebookAccount(userInfo.accessToken);
 
     if (accountService.isAuthTokenSetted()) {
       props.onSucceed();

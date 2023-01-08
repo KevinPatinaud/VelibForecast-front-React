@@ -1,9 +1,10 @@
 import { faUser, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { TranslationKeys } from "../../locales/constants";
+import { AccountContext } from "../../provider/AccountProvider";
 import { AccountService } from "../../services/Account/Account.service";
 import styles from "./MyAccountMenu.module.css";
 
@@ -11,6 +12,7 @@ const accountService = new AccountService();
 
 const MyAccountMenu: FC = () => {
   const [displayMenu, setDisplayMenu] = useState(false);
+  const { account } = useContext(AccountContext);
 
   const onMouseLeave = () => setDisplayMenu(false);
 
@@ -25,13 +27,11 @@ const MyAccountMenu: FC = () => {
         onMouseLeave();
       }}
     >
-      <FontAwesomeIcon
-        icon={!accountService.isAuthTokenSetted() ? faUser : faUserCircle}
-      />
-      {displayMenu && !accountService.isAuthTokenSetted() && (
+      <FontAwesomeIcon icon={!account.isConnected ? faUser : faUserCircle} />
+      {displayMenu && !account.isConnected && (
         <MenuNotConnected onMouseLeave={onMouseLeave} />
       )}
-      {displayMenu && accountService.isAuthTokenSetted() && (
+      {displayMenu && account.isConnected && (
         <MenuConnected onMouseLeave={onMouseLeave} />
       )}
     </div>
@@ -45,6 +45,7 @@ const MenuNotConnected: FC<{ onMouseLeave: () => void }> = ({
 
   return (
     <div
+      data-testid="div_user_menu_not_connected"
       className={styles.accountMenu}
       onMouseLeave={(e) => {
         onMouseLeave();
@@ -67,10 +68,12 @@ const MenuNotConnected: FC<{ onMouseLeave: () => void }> = ({
 };
 
 const MenuConnected: FC<{ onMouseLeave: () => void }> = ({ onMouseLeave }) => {
+  const { account, setAccount } = useContext(AccountContext);
   const intl = useIntl();
 
   return (
     <div
+      data-testid="div_user_menu_connected"
       className={styles.accountMenu}
       onMouseLeave={(e) => {
         onMouseLeave();
@@ -80,6 +83,7 @@ const MenuConnected: FC<{ onMouseLeave: () => void }> = ({ onMouseLeave }) => {
         <li
           onClick={() => {
             accountService.disconnect();
+            setAccount({ ...account, isConnected: false });
             onMouseLeave();
           }}
         >

@@ -1,4 +1,6 @@
 export interface Account {
-  email: string;
-  password: string;
+  isConnected: boolean;
+  email?: string;
+  password?: string;
+  facebookId?: string;
 }

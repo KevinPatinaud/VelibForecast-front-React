@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { getServerURL } from "../../helper/Utils";
 import { Account } from "../../model/Account";
 import { HttpService } from "../Http/Http.service";
@@ -15,10 +16,7 @@ export class AccountService {
       }
     );
 
-    if (result.status === 200) {
-      this.httpService.setAuthToken(result?.data.JWT);
-      return result?.data;
-    } else return result.status;
+    return this.interpretConection(result);
   }
   async connectFacebookAccount(accessToken: String) {
     const result = await this.httpService.put(
@@ -28,10 +26,7 @@ export class AccountService {
       }
     );
 
-    if (result.status === 200) {
-      this.httpService.setAuthToken(result?.data.JWT);
-      return result?.data;
-    } else return result.status;
+    return this.interpretConection(result);
   }
 
   async createMailAccount(account: Account, captchaToken: String) {
@@ -44,10 +39,7 @@ export class AccountService {
       }
     );
 
-    if (result.status === 200) {
-      this.httpService.setAuthToken(result?.data.JWT);
-      return result?.data;
-    } else return result.status;
+    return this.interpretConection(result);
   }
 
   async createFacebookAccount(accessToken: String) {
@@ -57,6 +49,12 @@ export class AccountService {
         accessToken: accessToken,
       }
     );
+
+    return this.interpretConection(result);
+  }
+
+  private interpretConection(result: AxiosResponse<any, any>) {
+    if (result === undefined || result.status === undefined) return null;
 
     if (result.status === 200) {
       this.httpService.setAuthToken(result?.data.JWT);

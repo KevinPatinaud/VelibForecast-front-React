@@ -7,7 +7,7 @@ import {
 } from "react-facebook-login";
 import wrapper from "../../../../helper/test-context-builder";
 import { AccountService } from "../../../../services/Account/Account.service";
-import FaceBookLog from "./FaceBookSignIn";
+import FaceBookSignIn from "./FaceBookSignIn";
 
 const mockChildComponent = jest.fn();
 
@@ -17,9 +17,15 @@ const accountServiceMocked = AccountService as jest.MockedClass<
   typeof AccountService
 >;
 
-accountServiceMocked.prototype.createFacebookAccount = jest
+accountServiceMocked.prototype.connectFacebookAccount = jest
   .fn()
-  .mockReturnValue(Promise.resolve(true));
+  .mockReturnValue(
+    Promise.resolve({ status: 200, data: { JWT: "jwt token" } })
+  );
+
+accountServiceMocked.prototype.isAuthTokenSetted = jest
+  .fn()
+  .mockReturnValue(true);
 
 jest.mock("react-facebook-login", () => (props: ReactFacebookLoginProps) => {
   mockChildComponent(props);
@@ -42,30 +48,31 @@ jest.mock("react-facebook-login", () => (props: ReactFacebookLoginProps) => {
   );
 });
 
-describe("<FaceBookLog>", () => {
+describe("<FaceBookSignIn>", () => {
   describe("When is rendered", () => {
     it("should display", () => {
-      const scr = render(<FaceBookLog onSucceed={jest.fn()} />, { wrapper });
+      const scr = render(<FaceBookSignIn onSucceed={jest.fn()} />, { wrapper });
       expect(scr.queryByText("FacebookLogin")).toBeInTheDocument();
     });
   });
 
-  describe("When the user logged correclty", () => {
-    it("to define", () => {
-      const scr = render(<FaceBookLog onSucceed={jest.fn()} />, { wrapper });
+  describe("When the user logged correctly", () => {
+    it("should execute the onSucceed function props", () => {
+      const onSucceed = jest.fn();
+      const scr = render(<FaceBookSignIn onSucceed={onSucceed} />, { wrapper });
       userEvent.click(scr.getByTestId("FacebookLogin"));
 
       expect(
-        accountServiceMocked.prototype.createFacebookAccount
+        accountServiceMocked.prototype.connectFacebookAccount
       ).toHaveBeenCalledWith("accessToken");
     });
   });
 
   describe("When the user meet some difficulty to be logged", () => {
-    it("to define", () => {
+    it("should display en error message", () => {
       const logSpy = jest.spyOn(console, "log");
 
-      const scr = render(<FaceBookLog onSucceed={jest.fn()} />, { wrapper });
+      const scr = render(<FaceBookSignIn onSucceed={jest.fn()} />, { wrapper });
       userEvent.click(scr.getByTestId("FacebookLoginFail"));
 
       expect(logSpy).toHaveBeenCalledWith("fail");
