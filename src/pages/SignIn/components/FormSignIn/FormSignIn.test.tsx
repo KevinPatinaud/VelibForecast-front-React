@@ -1,17 +1,28 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { act } from "react-dom/test-utils";
 import { Props as ReaptchaProps } from "reaptcha";
-import { AccountService } from "../../../services/Account/Account.service";
-import wrapper from "../../../helper/test-context-builder";
-import FormSignUp from "./FormSignUp";
+import wrapper from "../../../../helper/test-context-builder";
+import { AccountService } from "../../../../services/Account/Account.service";
+import FormSignUp from "./FormSignIn";
 
-jest.mock("../../../services/Account/Account.service");
+jest.mock("../../../../services/Account/Account.service");
 
 const accountServiceMocked = AccountService as jest.MockedClass<
   typeof AccountService
 >;
 
-accountServiceMocked.prototype.createAccount.mockResolvedValue();
+beforeEach(() => {
+  accountServiceMocked.mockClear();
+
+  accountServiceMocked.prototype.createMailAccount = jest
+    .fn()
+    .mockReturnValue(Promise.resolve(true));
+
+  accountServiceMocked.prototype.isAccountExist = jest
+    .fn()
+    .mockResolvedValue(Promise.resolve(false));
+});
 
 const mockChildComponent = jest.fn();
 
@@ -35,7 +46,7 @@ jest.mock("reaptcha", () => (props: ReaptchaProps) => {
 describe("Sign up page", () => {
   describe("When the sign in page render", () => {
     it("should display the formular", () => {
-      render(<FormSignUp />, { wrapper });
+      render(<FormSignUp onSucceed={jest.fn} />, { wrapper });
       expect(screen.queryByText("Email")).not.toBeNull();
       expect(
         screen.queryByText("Mot de passe (doit contenir au moins 8 caractères)")
@@ -47,19 +58,21 @@ describe("Sign up page", () => {
 
   describe("When the user didn't complete the formular and click on submit", () => {
     it("should display an error message", () => {
-      render(<FormSignUp />, { wrapper });
+      render(<FormSignUp onSucceed={jest.fn} />, { wrapper });
       userEvent.click(screen.getByText("Valider"));
 
       expect(
         screen.queryByText("Merci de completer correctement le formulaire")
       ).not.toBeNull();
-      expect(accountServiceMocked.prototype.createAccount).not.toBeCalled();
+      expect(accountServiceMocked.prototype.createMailAccount).not.toBeCalled();
     });
   });
 
   describe("When the user close the information modal", () => {
-    it("should hidde the modal", () => {
-      const scr = render(<FormSignUp />, { wrapper });
+    it("should hidde the modal", async () => {
+      const scr = render(<FormSignUp onSucceed={jest.fn} />, {
+        wrapper,
+      });
       userEvent.click(screen.getByText("Valider"));
 
       expect(
@@ -72,13 +85,15 @@ describe("Sign up page", () => {
         screen.queryByText("Merci de completer correctement le formulaire")
       ).toBeNull();
 
-      expect(accountServiceMocked.prototype.createAccount).not.toBeCalled();
+      expect(accountServiceMocked.prototype.createMailAccount).not.toBeCalled();
     });
   });
 
   describe("When the user set two different password", () => {
     it("should display an specific error message", async () => {
-      const scr = render(<FormSignUp />, { wrapper });
+      const scr = render(<FormSignUp onSucceed={jest.fn} />, {
+        wrapper,
+      });
 
       userEvent.type(screen.getByTestId("input_password"), "myPassword");
 
@@ -86,30 +101,63 @@ describe("Sign up page", () => {
 
       fireEvent.blur(scr.getByTestId("input_password2"));
 
-      expect(accountServiceMocked.prototype.createAccount).not.toBeCalled();
+      expect(accountServiceMocked.prototype.createMailAccount).not.toBeCalled();
       expect(
         screen.queryByText("Les deux mots de passe sont différents")
       ).not.toBeNull();
     });
   });
+
+  describe("When the user set an already exist adresse mail", () => {
+    it("should display an error message", async () => {
+      jest.spyOn(console, "error").mockImplementation(); // !!! TO ANALYSE AND REMOVE
+
+      accountServiceMocked.prototype.isAccountExist = jest
+        .fn()
+        .mockResolvedValue(Promise.resolve(true));
+
+      const scr = render(<FormSignUp onSucceed={jest.fn} />, { wrapper });
+
+      userEvent.type(screen.getByTestId("input_email"), "mario@plombier.com");
+
+      await waitFor(() =>
+        expect(accountServiceMocked.prototype.isAccountExist).toBeCalledWith(
+          "mario@plombier.com"
+        )
+      );
+
+      await waitFor(() =>
+        expect(
+          scr.queryByText("This mail is already attached to an account")
+        ).toBeInTheDocument()
+      );
+    });
+  });
+
   describe("When the user well complet the formular and click on submit", () => {
-    it("should send the formular to the back-end", () => {
-      render(<FormSignUp />, { wrapper });
+    it("should send the formular to the back-end", async () => {
+      render(<FormSignUp onSucceed={jest.fn} />, { wrapper });
 
       userEvent.type(screen.getByTestId("input_email"), "Benabar@musique.fr");
+      await waitFor(() =>
+        expect(
+          accountServiceMocked.prototype.isAccountExist
+        ).toHaveBeenCalledWith("Benabar@musique.fr")
+      );
       userEvent.type(screen.getByTestId("input_password"), "myPassword");
       userEvent.type(screen.getByTestId("input_password2"), "myPassword");
-
       userEvent.click(screen.getByTestId("reaptcha_onVerify"));
 
       userEvent.click(screen.getByText("Valider"));
 
-      expect(accountServiceMocked.prototype.createAccount).toBeCalledWith(
-        {
-          email: "Benabar@musique.fr",
-          password: "myPassword",
-        },
-        "token_validated_captcha"
+      await waitFor(() =>
+        expect(accountServiceMocked.prototype.createMailAccount).toBeCalledWith(
+          {
+            email: "Benabar@musique.fr",
+            password: "myPassword",
+          },
+          "token_validated_captcha"
+        )
       );
 
       expect(
@@ -119,13 +167,11 @@ describe("Sign up page", () => {
   });
 
   describe("When the captcha is expired", () =>
-    it("should displayed the default warning message", () => {
-      render(<FormSignUp />, { wrapper });
+    it("should displayed the default warning message", async () => {
+      render(<FormSignUp onSucceed={jest.fn} />, { wrapper });
 
       userEvent.click(screen.getByTestId("reaptcha_onVerify"));
-
       userEvent.click(screen.getByTestId("reaptcha_onExpire"));
-
       userEvent.click(screen.getByText("Valider"));
 
       expect(

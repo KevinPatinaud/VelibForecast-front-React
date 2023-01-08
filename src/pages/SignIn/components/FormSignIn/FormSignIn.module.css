@@ -7,6 +7,10 @@
   margin-bottom: 10px;
 }
 
+.alert {
+  color: red;
+}
+
 .inputText {
   width: 100%;
   max-width: 480px;

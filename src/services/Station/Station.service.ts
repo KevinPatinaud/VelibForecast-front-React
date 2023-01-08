@@ -39,7 +39,7 @@ export class StationService {
     const states = [];
     for (let i = 0; i < httpResponse.data.length; i++) {
       const state = {
-        idStation: httpResponse.data[i]?.stationCode,
+        idStation: httpResponse.data[i]?.station?.stationCode,
         nmbBikeAvailable: httpResponse.data[i]?.numBikesAvailable,
         nmbPlaceAvailable: httpResponse.data[i]?.numDocksAvailable,
       } as StationState;

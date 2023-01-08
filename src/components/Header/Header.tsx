@@ -3,7 +3,7 @@ import { faBicycle } from "@fortawesome/free-solid-svg-icons";
 import { FC } from "react";
 import styles from "./Header.module.css";
 import LanguageButtons from "../LanguageButtons";
-import MyAccount from "../MyAccount/MyAccount";
+import MyAccountMenu from "../MyAccountMenu/MyAccountMenu";
 import { Link } from "react-router-dom";
 
 const Header: FC = () => {
@@ -15,7 +15,7 @@ const Header: FC = () => {
         </Link>
       </div>
       <div className={styles.rightMenu}>
-        <MyAccount />
+        <MyAccountMenu />
         <LanguageButtons />
       </div>
     </div>

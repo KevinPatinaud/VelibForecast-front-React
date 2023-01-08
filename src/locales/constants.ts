@@ -13,9 +13,16 @@ export enum TranslationKeys {
 
   CREATE_YOUR_ACCOUNT = "form.create.your.account",
   E_MAIL = "form.e.mail",
+  PASSWORD_LogIn = "form.paswword.login",
   PASSWORD = "form.paswword1",
   PASSWORD_CONFIRM = "form.paswword2",
   VALIDATE = "form.validate",
   PLEASE_WELL_COMPLETE_FORM = "form.please.well.complete",
   PASSWORD_ARE_DIFFERENT = "form.password.different",
+
+  USER_ALREADY_EXIST = "user.already.exist",
+  WELCOME_NEW_USER = "welcome.new.user",
+  OR_SIGN_WITH = "or.sign.with",
+  DISCONNECT = "disconnect",
+  CONNECTION = "connection",
 }

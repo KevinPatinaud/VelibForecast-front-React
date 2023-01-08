@@ -2,21 +2,26 @@ import { FC, useState } from "react";
 import { useIntl } from "react-intl";
 import Reaptcha from "reaptcha";
 import styles from "./FormSignUp.module.css";
-import { TranslationKeys } from "../../../locales/constants";
-import { Account } from "../../../model/Account";
-import { AccountService } from "../../../services/Account/Account.service";
-import InformationModal from "../../../components/InformationModal/InformationModal";
+import { TranslationKeys } from "../../../../locales/constants";
+import { Account } from "../../../../model/Account";
+import { AccountService } from "../../../../services/Account/Account.service";
+import InformationModal from "../../../../components/InformationModal/InformationModal";
 
-const FormSignUp: FC = () => {
+export interface FormSignUpProps {
+  onSucceed: () => void;
+}
+
+const accountService = new AccountService();
+
+const FormSignUp: FC<FormSignUpProps> = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const [captchaToken, setCaptchaToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [mailAlreadyExist, setMailAlreadyExist] = useState(false);
 
   const intl = useIntl();
-
-  const accountService = new AccountService();
 
   const formIsValide = () => {
     return email !== "" &&
@@ -34,15 +39,28 @@ const FormSignUp: FC = () => {
       : false;
   };
 
-  const submitForm = () => {
+  const submitForm = async () => {
     if (formIsValide()) {
-      accountService.createAccount(
+      const result = await accountService.createMailAccount(
         {
           email: email,
           password: password,
         } as Account,
         captchaToken
       );
+
+      if (result instanceof Number) {
+        if ((result as Number) === 304)
+          setErrorMessage(
+            intl.formatMessage({
+              id: TranslationKeys.USER_ALREADY_EXIST,
+            })
+          );
+      }
+
+      if (accountService.isAuthTokenSetted()) {
+        props.onSucceed();
+      }
     } else {
       setErrorMessage(
         intl.formatMessage({ id: TranslationKeys.PLEASE_WELL_COMPLETE_FORM })
@@ -54,13 +72,25 @@ const FormSignUp: FC = () => {
     <>
       <div className={styles.information}>
         <label>{intl.formatMessage({ id: TranslationKeys.E_MAIL })}</label>
+        {mailAlreadyExist && (
+          <div data-testid="label_mail_already_exist" className={styles.alert}>
+            This mail is already attached to an account
+          </div>
+        )}
         <input
           data-testid="input_email"
           type="email"
           className={styles.inputText}
           value={email}
-          onChange={(e) => {
+          onChange={async (e) => {
             setEmail(e.target.value);
+            if (e.target.value.length > 5) {
+              setMailAlreadyExist(
+                await accountService.isAccountExist(e.target.value)
+              );
+            } else {
+              setMailAlreadyExist(false);
+            }
           }}
         ></input>
       </div>
