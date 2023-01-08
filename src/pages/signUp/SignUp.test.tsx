@@ -12,7 +12,7 @@ jest.mock(
     mockChildComponent(props);
 
     return (
-      <div data-testid="FormSignUp" onClick={props.onSucced}>
+      <div data-testid="FormSignUp" onClick={props.onSucceed}>
         FormSignUp
       </div>
     );

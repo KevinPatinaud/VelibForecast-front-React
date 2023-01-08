@@ -4,6 +4,7 @@ import Search from "./pages/search";
 import Body from "./components/Body/Body";
 import AppProviders from "./provider";
 import { Route, Routes } from "react-router-dom";
+import GlobalMessage from "./components/GlobalMessage/GlobalMessage";
 
 const SignUp = React.lazy(() => import("./pages/signUp/SignUp"));
 const SignIn = React.lazy(() => import("./pages/SignIn/SignIn"));
@@ -14,6 +15,7 @@ function App() {
     <AppProviders>
       <>
         <Header />
+        <GlobalMessage />
         <Body>
           <Routes>
             <Route path="/" element={<Search />} />

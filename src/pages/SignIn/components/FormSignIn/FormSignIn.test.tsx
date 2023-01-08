@@ -4,7 +4,7 @@ import { act } from "react-dom/test-utils";
 import { Props as ReaptchaProps } from "reaptcha";
 import wrapper from "../../../../helper/test-context-builder";
 import { AccountService } from "../../../../services/Account/Account.service";
-import FormSignUp from "./FormSignUp";
+import FormSignUp from "./FormSignIn";
 
 jest.mock("../../../../services/Account/Account.service");
 

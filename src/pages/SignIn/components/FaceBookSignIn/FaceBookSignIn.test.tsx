@@ -7,7 +7,7 @@ import {
 } from "react-facebook-login";
 import wrapper from "../../../../helper/test-context-builder";
 import { AccountService } from "../../../../services/Account/Account.service";
-import FaceBookLog from "./FaceBookLog";
+import FaceBookLog from "./FaceBookSignIn";
 
 const mockChildComponent = jest.fn();
 

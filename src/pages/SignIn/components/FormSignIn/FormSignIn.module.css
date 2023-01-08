@@ -1,36 +1,27 @@
-.pageContent {
-  margin: 30px;
-  display: flex;
-  flex-direction: column;
-  height: fit-content;
-  text-align: center;
-  align-items: center;
-}
-
-.pageTitle {
-  padding: 10px;
-  font-size: x-large;
-  text-decoration-line: underline;
-}
-
 .information {
   padding: 10px;
+  width: 100%;
 }
 .information label {
   display: block;
   margin-bottom: 10px;
 }
 
+.alert {
+  color: red;
+}
+
 .inputText {
-  width: 480px;
+  width: 100%;
+  max-width: 480px;
   height: 30px;
   border-radius: 25px;
   border: 2px solid black;
-  padding: 1px 10px;
+  padding: 1px 0px;
   text-align: center;
 }
 
-.signInBtn {
+.signUpBtn {
   border-radius: 25px;
   border: 2px solid black;
   width: 240px;
@@ -46,11 +37,10 @@
   padding: 7px;
 }
 
-.signInBtn:hover {
+.signUpBtn:hover {
   text-decoration: underline;
 }
 
-.boxOrSocial {
-  margin-top: 30px;
-  margin-bottom: 30px;
+.captcha {
+  padding-top: 20px;
 }

@@ -15,10 +15,17 @@ export const fr: Translation = {
   [TranslationKeys.E_MAIL]: "Email",
   [TranslationKeys.PASSWORD]:
     "Mot de passe (doit contenir au moins 8 caractères)",
+  [TranslationKeys.PASSWORD_LogIn]: "Mot de passe",
   [TranslationKeys.PASSWORD_CONFIRM]: "Confirmez votre mot de passe",
   [TranslationKeys.VALIDATE]: "Valider",
   [TranslationKeys.PLEASE_WELL_COMPLETE_FORM]:
     "Merci de completer correctement le formulaire",
   [TranslationKeys.PASSWORD_ARE_DIFFERENT]:
     "Les deux mots de passe sont différents",
+  [TranslationKeys.USER_ALREADY_EXIST]: "Cet utilisateur existe déjà",
+  [TranslationKeys.WELCOME_NEW_USER]:
+    "Bonjour, votre compte a été correcttement créé",
+  [TranslationKeys.OR_SIGN_WITH]: "OU CONNECTEZ VOUS AVEC",
+  [TranslationKeys.DISCONNECT]: "Me déconnecter",
+  [TranslationKeys.CONNECTION]: "Connexion",
 };

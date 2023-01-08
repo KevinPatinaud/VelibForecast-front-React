@@ -20,7 +20,7 @@ describe("Account service", () => {
   describe("when createAccount service is called", () => {
     it("should call http service", () => {
       const accountService = new AccountService();
-      accountService.createAccount({} as Account, "captcha token");
+      accountService.createMailAccount({} as Account, "captcha token");
 
       expect(httpService.prototype.post).toHaveBeenCalledWith(
         getServerURL() + ":8083/MailUser",
