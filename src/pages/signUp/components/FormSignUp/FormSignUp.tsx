@@ -1,17 +1,16 @@
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { useIntl } from "react-intl";
 import Reaptcha from "reaptcha";
 import styles from "./FormSignUp.module.css";
 import { TranslationKeys } from "../../../../locales/constants";
 import { Account } from "../../../../model/Account";
-import { AccountService } from "../../../../services/Account/Account.service";
+import AccountService from "../../../../services/Account/Account.service";
 import InformationModal from "../../../../components/InformationModal/InformationModal";
+import { AccountContext } from "../../../../provider/AccountProvider";
 
 export interface FormSignUpProps {
   onSucceed: () => void;
 }
-
-const accountService = new AccountService();
 
 const FormSignUp: FC<FormSignUpProps> = (props) => {
   const [email, setEmail] = useState("");
@@ -22,6 +21,7 @@ const FormSignUp: FC<FormSignUpProps> = (props) => {
   const [mailAlreadyExist, setMailAlreadyExist] = useState(false);
 
   const intl = useIntl();
+  const { setAccount } = useContext(AccountContext);
 
   const formIsValide = () => {
     return email !== "" &&
@@ -41,7 +41,7 @@ const FormSignUp: FC<FormSignUpProps> = (props) => {
 
   const submitForm = async () => {
     if (formIsValide()) {
-      const result = await accountService.createMailAccount(
+      const result = await AccountService.createMailAccount(
         {
           email: email,
           password: password,
@@ -58,7 +58,8 @@ const FormSignUp: FC<FormSignUpProps> = (props) => {
           );
       }
 
-      if (accountService.isAuthTokenSetted()) {
+      if (AccountService.isAuthTokenSetted() && !(result instanceof Number)) {
+        setAccount({ ...(result as Account), isConnected: true });
         props.onSucceed();
       }
     } else {
@@ -86,7 +87,7 @@ const FormSignUp: FC<FormSignUpProps> = (props) => {
             setEmail(e.target.value);
             if (e.target.value.length > 5) {
               setMailAlreadyExist(
-                await accountService.isAccountExist(e.target.value)
+                await AccountService.isAccountExist(e.target.value)
               );
             } else {
               setMailAlreadyExist(false);

@@ -3,24 +3,19 @@ import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { Props as ReaptchaProps } from "reaptcha";
 import wrapper from "../../../../helper/test-context-builder";
-import { AccountService } from "../../../../services/Account/Account.service";
+import { Account } from "../../../../model/Account";
+import AccountService from "../../../../services/Account/Account.service";
 import FormSignUp from "./FormSignUp";
 
 jest.mock("../../../../services/Account/Account.service");
 
-const accountServiceMocked = AccountService as jest.MockedClass<
-  typeof AccountService
->;
-
 beforeEach(() => {
-  accountServiceMocked.mockClear();
+  jest
+    .spyOn(AccountService, "createMailAccount")
+    .mockReturnValue(Promise.resolve({} as Account));
 
-  accountServiceMocked.prototype.createMailAccount = jest
-    .fn()
-    .mockReturnValue(Promise.resolve(true));
-
-  accountServiceMocked.prototype.isAccountExist = jest
-    .fn()
+  jest
+    .spyOn(AccountService, "isAccountExist")
     .mockResolvedValue(Promise.resolve(false));
 });
 
@@ -64,7 +59,7 @@ describe("Sign up page", () => {
       expect(
         screen.queryByText("Merci de completer correctement le formulaire")
       ).not.toBeNull();
-      expect(accountServiceMocked.prototype.createMailAccount).not.toBeCalled();
+      expect(AccountService.createMailAccount).not.toBeCalled();
     });
   });
 
@@ -85,7 +80,7 @@ describe("Sign up page", () => {
         screen.queryByText("Merci de completer correctement le formulaire")
       ).toBeNull();
 
-      expect(accountServiceMocked.prototype.createMailAccount).not.toBeCalled();
+      expect(AccountService.createMailAccount).not.toBeCalled();
     });
   });
 
@@ -101,7 +96,7 @@ describe("Sign up page", () => {
 
       fireEvent.blur(scr.getByTestId("input_password2"));
 
-      expect(accountServiceMocked.prototype.createMailAccount).not.toBeCalled();
+      expect(AccountService.createMailAccount).not.toBeCalled();
       expect(
         screen.queryByText("Les deux mots de passe sont différents")
       ).not.toBeNull();

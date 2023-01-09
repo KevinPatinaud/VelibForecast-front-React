@@ -1,10 +1,16 @@
-import { faBicycle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBicycle,
+  faHeartCircleMinus,
+  faHeartCirclePlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { Station } from "../../../../model/Station";
 import styles from "./stationDetails.module.css";
 import { useIntl } from "react-intl";
 import { TranslationKeys } from "../../../../locales/constants";
+import { AccountContext } from "../../../../provider/AccountProvider";
+import AccountService from "../../../../services/Account/Account.service";
 
 export interface StationDetailsProps {
   station: Station;
@@ -12,10 +18,61 @@ export interface StationDetailsProps {
 
 const StationDetails: FC<StationDetailsProps> = (props) => {
   const intl = useIntl();
+  const { account, setAccount } = useContext(AccountContext);
+
+  let isUserFavoriteStation = false;
+
+  if (account.isConnected && account.favoriteStations) {
+    for (let i = 0; i < account.favoriteStations.length; i++) {
+      if (props.station.id === account.favoriteStations.at(i)?.id) {
+        isUserFavoriteStation = true;
+      }
+    }
+  }
 
   return (
     <div>
-      <div className={styles.stationName}>{props.station.name}</div>
+      <div className={styles.titleStation}>
+        <div className={styles.stationName}>{props.station.name}</div>
+        {account.isConnected && !isUserFavoriteStation && (
+          <div
+            className={styles.addFavoriteStation}
+            onClick={() => {
+              AccountService.addFavoriteStation(props.station);
+              const favStations = account.favoriteStations as Station[];
+              favStations?.push(props.station);
+              setAccount({
+                ...account,
+                favoriteStations: [...favStations],
+              });
+            }}
+          >
+            <FontAwesomeIcon icon={faHeartCirclePlus} />
+          </div>
+        )}
+        {account.isConnected && isUserFavoriteStation && (
+          <div
+            className={styles.removeFavoriteStation}
+            onClick={() => {
+              AccountService.removeFavoriteStation(props.station);
+              const favStations = [] as Station[];
+
+              (account.favoriteStations as Station[]).forEach((station) => {
+                if (station.id !== props.station.id) {
+                  favStations.push(station);
+                }
+              });
+
+              setAccount({
+                ...account,
+                favoriteStations: [...favStations],
+              });
+            }}
+          >
+            <FontAwesomeIcon icon={faHeartCircleMinus} />
+          </div>
+        )}
+      </div>
       <table className={styles.detailTable}>
         <thead>
           <tr>

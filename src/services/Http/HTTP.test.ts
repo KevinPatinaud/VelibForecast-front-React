@@ -1,5 +1,5 @@
 import axios, { Axios, AxiosResponse } from "axios";
-import { HttpService } from "./Http.service";
+import HttpService from "./Http.service";
 
 jest.mock("axios");
 
@@ -10,8 +10,7 @@ describe("HTTPservice", () => {
         data: { AxiosResponse: "AxiosResponse" },
       } as AxiosResponse<any, any>);
 
-      const httpService = new HttpService();
-      const response = await httpService.get("www.URL_TEST.com");
+      const response = await HttpService.get("www.URL_TEST.com");
 
       expect(axios.get).toHaveBeenCalledWith("www.URL_TEST.com");
       expect(response).toEqual({ data: { AxiosResponse: "AxiosResponse" } });
@@ -24,8 +23,7 @@ describe("HTTPservice", () => {
         data: { AxiosResponse: "AxiosResponse" },
       } as AxiosResponse<any, any>);
 
-      const httpService = new HttpService();
-      const response = await httpService.post("www.URL_TEST.com", {
+      const response = await HttpService.post("www.URL_TEST.com", {
         postParam: "postParam",
       });
 

@@ -1,52 +1,52 @@
 import { AxiosResponse } from "axios";
 import { getServerURL } from "../../helper/Utils";
 import { Account } from "../../model/Account";
-import { HttpService } from "../Http/Http.service";
+import HttpService from "../Http/Http.service";
 import { StationService } from "./Station.service";
 
 jest.mock("../Http/Http.service");
 
-const httpService = HttpService as jest.MockedClass<typeof HttpService>;
-
 describe("Station service", () => {
   describe("when get station service is called", () => {
     it("should return a list of station without status", async () => {
-      httpService.prototype.get = jest.fn().mockReturnValue({
-        data: [
-          {
-            stationCode: 16107,
-            name: "Benjamin Godard - Victor Hugo",
-            latitude: 48.865983,
-            longitude: 2.275725,
-            capacity: 35,
-            rentalMethods: null,
-            states: null,
-          },
-          {
-            stationCode: 31104,
-            name: "Mairie de Rosny-sous-Bois",
-            latitude: 48.871256519012,
-            longitude: 2.4865807592869,
-            capacity: 30,
-            rentalMethods: "CREDITCARD",
-            states: null,
-          },
-          {
-            stationCode: 11104,
-            name: "Charonne - Robert et Sonia Delauney",
-            latitude: 48.85590755596891,
-            longitude: 2.3925706744194035,
-            capacity: 20,
-            rentalMethods: null,
-            states: null,
-          },
-        ],
-      } as AxiosResponse<any, any>);
+      jest.spyOn(HttpService, "get").mockReturnValue(
+        Promise.resolve({
+          data: [
+            {
+              stationCode: 16107,
+              name: "Benjamin Godard - Victor Hugo",
+              latitude: 48.865983,
+              longitude: 2.275725,
+              capacity: 35,
+              rentalMethods: null,
+              states: null,
+            },
+            {
+              stationCode: 31104,
+              name: "Mairie de Rosny-sous-Bois",
+              latitude: 48.871256519012,
+              longitude: 2.4865807592869,
+              capacity: 30,
+              rentalMethods: "CREDITCARD",
+              states: null,
+            },
+            {
+              stationCode: 11104,
+              name: "Charonne - Robert et Sonia Delauney",
+              latitude: 48.85590755596891,
+              longitude: 2.3925706744194035,
+              capacity: 20,
+              rentalMethods: null,
+              states: null,
+            },
+          ],
+        } as AxiosResponse<any, any>)
+      );
 
       const stationService = new StationService();
       const stations = await stationService.getStations();
 
-      expect(httpService.prototype.get).toHaveBeenCalledWith(
+      expect(HttpService.get).toHaveBeenCalledWith(
         getServerURL() + ":8083/stations"
       );
 
@@ -76,42 +76,44 @@ describe("Station service", () => {
     });
 
     it("should return a list of station with status", async () => {
-      httpService.prototype.get = jest.fn().mockReturnValue({
-        data: [
-          {
-            stationCode: 16107,
-            name: "Benjamin Godard - Victor Hugo",
-            latitude: 48.865983,
-            longitude: 2.275725,
-            capacity: 35,
-            rentalMethods: null,
-            states: { numBikesAvailable: 23, numDocksAvailable: 32 },
-          },
-          {
-            stationCode: 31104,
-            name: "Mairie de Rosny-sous-Bois",
-            latitude: 48.871256519012,
-            longitude: 2.4865807592869,
-            capacity: 30,
-            rentalMethods: "CREDITCARD",
-            states: { numBikesAvailable: 42, numDocksAvailable: 5 },
-          },
-          {
-            stationCode: 11104,
-            name: "Charonne - Robert et Sonia Delauney",
-            latitude: 48.85590755596891,
-            longitude: 2.3925706744194035,
-            capacity: 20,
-            rentalMethods: null,
-            states: { numBikesAvailable: 13, numDocksAvailable: 7 },
-          },
-        ],
-      } as AxiosResponse<any, any>);
+      jest.spyOn(HttpService, "get").mockReturnValue(
+        Promise.resolve({
+          data: [
+            {
+              stationCode: 16107,
+              name: "Benjamin Godard - Victor Hugo",
+              latitude: 48.865983,
+              longitude: 2.275725,
+              capacity: 35,
+              rentalMethods: null,
+              states: { numBikesAvailable: 23, numDocksAvailable: 32 },
+            },
+            {
+              stationCode: 31104,
+              name: "Mairie de Rosny-sous-Bois",
+              latitude: 48.871256519012,
+              longitude: 2.4865807592869,
+              capacity: 30,
+              rentalMethods: "CREDITCARD",
+              states: { numBikesAvailable: 42, numDocksAvailable: 5 },
+            },
+            {
+              stationCode: 11104,
+              name: "Charonne - Robert et Sonia Delauney",
+              latitude: 48.85590755596891,
+              longitude: 2.3925706744194035,
+              capacity: 20,
+              rentalMethods: null,
+              states: { numBikesAvailable: 13, numDocksAvailable: 7 },
+            },
+          ],
+        } as AxiosResponse<any, any>)
+      );
 
       const stationService = new StationService();
       const stations = await stationService.getStations();
 
-      expect(httpService.prototype.get).toHaveBeenCalledWith(
+      expect(HttpService.get).toHaveBeenCalledWith(
         getServerURL() + ":8083/stations"
       );
 
@@ -143,78 +145,80 @@ describe("Station service", () => {
 
   describe("when get status service is called", () => {
     it("should return the updated list of status", async () => {
-      httpService.prototype.get = jest.fn().mockReturnValue({
-        data: [
-          {
-            id: 0,
-            station: {
-              stationCode: 16107,
-              states: null,
-              timeStampInformationGot: 0,
-              name: null,
-              latitude: 0.0,
-              longitude: 0.0,
-              capacity: 0,
-              rentalMethods: null,
+      jest.spyOn(HttpService, "get").mockReturnValue(
+        Promise.resolve({
+          data: [
+            {
+              id: 0,
+              station: {
+                stationCode: 16107,
+                states: null,
+                timeStampInformationGot: 0,
+                name: null,
+                latitude: 0.0,
+                longitude: 0.0,
+                capacity: 0,
+                rentalMethods: null,
+              },
+              numBikesAvailable: 3,
+              numBikesAvailableTypesMechanical: 1,
+              numBikesAvailableTypesEbike: 2,
+              numDocksAvailable: 32,
+              isInstalled: true,
+              isReturning: true,
+              isRenting: true,
+              lastReported: 1670653617,
             },
-            numBikesAvailable: 3,
-            numBikesAvailableTypesMechanical: 1,
-            numBikesAvailableTypesEbike: 2,
-            numDocksAvailable: 32,
-            isInstalled: true,
-            isReturning: true,
-            isRenting: true,
-            lastReported: 1670653617,
-          },
-          {
-            id: 0,
-            station: {
-              stationCode: 31104,
-              states: null,
-              timeStampInformationGot: 0,
-              name: null,
-              latitude: 0.0,
-              longitude: 0.0,
-              capacity: 0,
-              rentalMethods: null,
+            {
+              id: 0,
+              station: {
+                stationCode: 31104,
+                states: null,
+                timeStampInformationGot: 0,
+                name: null,
+                latitude: 0.0,
+                longitude: 0.0,
+                capacity: 0,
+                rentalMethods: null,
+              },
+              numBikesAvailable: 19,
+              numBikesAvailableTypesMechanical: 10,
+              numBikesAvailableTypesEbike: 9,
+              numDocksAvailable: 10,
+              isInstalled: true,
+              isReturning: true,
+              isRenting: true,
+              lastReported: 1670653662,
             },
-            numBikesAvailable: 19,
-            numBikesAvailableTypesMechanical: 10,
-            numBikesAvailableTypesEbike: 9,
-            numDocksAvailable: 10,
-            isInstalled: true,
-            isReturning: true,
-            isRenting: true,
-            lastReported: 1670653662,
-          },
-          {
-            id: 0,
-            station: {
-              stationCode: 11104,
-              states: null,
-              timeStampInformationGot: 0,
-              name: null,
-              latitude: 0.0,
-              longitude: 0.0,
-              capacity: 0,
-              rentalMethods: null,
+            {
+              id: 0,
+              station: {
+                stationCode: 11104,
+                states: null,
+                timeStampInformationGot: 0,
+                name: null,
+                latitude: 0.0,
+                longitude: 0.0,
+                capacity: 0,
+                rentalMethods: null,
+              },
+              numBikesAvailable: 5,
+              numBikesAvailableTypesMechanical: 1,
+              numBikesAvailableTypesEbike: 4,
+              numDocksAvailable: 14,
+              isInstalled: true,
+              isReturning: true,
+              isRenting: true,
+              lastReported: 1670653696,
             },
-            numBikesAvailable: 5,
-            numBikesAvailableTypesMechanical: 1,
-            numBikesAvailableTypesEbike: 4,
-            numDocksAvailable: 14,
-            isInstalled: true,
-            isReturning: true,
-            isRenting: true,
-            lastReported: 1670653696,
-          },
-        ],
-      } as AxiosResponse<any, any>);
+          ],
+        } as AxiosResponse<any, any>)
+      );
 
       const stationService = new StationService();
       const statuses = await stationService.getStatus();
 
-      expect(httpService.prototype.get).toHaveBeenCalledWith(
+      expect(HttpService.get).toHaveBeenCalledWith(
         getServerURL() + ":8083/stationStates"
       );
 

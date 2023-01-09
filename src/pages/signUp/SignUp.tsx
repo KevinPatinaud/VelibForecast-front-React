@@ -1,16 +1,14 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import styles from "./SignUp.module.css";
 import { useIntl } from "react-intl";
 import { TranslationKeys } from "../../locales/constants";
 import FormSignUp from "./components/FormSignUp/FormSignUp";
 import FaceBookLog from "./components/FaceBookLog/FaceBookLog";
 import { useNavigate } from "react-router-dom";
-import { AccountContext } from "../../provider/AccountProvider";
 
 const SignUp: FC = () => {
   const intl = useIntl();
   const naviguate = useNavigate();
-  const { account, setAccount } = useContext(AccountContext);
 
   return (
     <div className={styles.pageContent}>
@@ -19,7 +17,6 @@ const SignUp: FC = () => {
       </div>
       <FormSignUp
         onSucceed={() => {
-          setAccount({ ...account, isConnected: true });
           naviguate("/", {
             state: {
               message: intl.formatMessage({
@@ -44,7 +41,6 @@ const SignUp: FC = () => {
       </div>
       <FaceBookLog
         onSucceed={() => {
-          setAccount({ ...account, isConnected: true });
           naviguate("/", {
             state: {
               message: intl.formatMessage({

@@ -5,10 +5,8 @@ import { useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { TranslationKeys } from "../../locales/constants";
 import { AccountContext } from "../../provider/AccountProvider";
-import { AccountService } from "../../services/Account/Account.service";
+import AccountService from "../../services/Account/Account.service";
 import styles from "./MyAccountMenu.module.css";
-
-const accountService = new AccountService();
 
 const MyAccountMenu: FC = () => {
   const [displayMenu, setDisplayMenu] = useState(false);
@@ -82,7 +80,7 @@ const MenuConnected: FC<{ onMouseLeave: () => void }> = ({ onMouseLeave }) => {
       <ul>
         <li
           onClick={() => {
-            accountService.disconnect();
+            AccountService.disconnect();
             setAccount({ ...account, isConnected: false });
             onMouseLeave();
           }}

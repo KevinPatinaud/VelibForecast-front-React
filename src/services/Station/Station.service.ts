@@ -1,12 +1,11 @@
 import { getServerURL } from "../../helper/Utils";
 import { Station } from "../../model/Station";
 import { StationState } from "../../model/StationState";
-import { HttpService } from "../Http/Http.service";
+import HttpService from "../Http/Http.service";
 
 export class StationService {
-  httpService = new HttpService();
   async getStations() {
-    const httpResponse = await this.httpService.get(
+    const httpResponse = await HttpService.get(
       getServerURL() + ":8083/stations"
     );
 
@@ -32,7 +31,7 @@ export class StationService {
   }
 
   async getStatus() {
-    const httpResponse = await this.httpService.get(
+    const httpResponse = await HttpService.get(
       getServerURL() + ":8083/stationStates"
     );
 
