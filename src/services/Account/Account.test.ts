@@ -37,7 +37,7 @@ describe("Account service", () => {
       AccountService.createMailAccount({} as Account, "captcha token");
 
       expect(HttpService.post).toHaveBeenCalledWith(
-        getServerURL() + ":8083/MailUser",
+        getServerURL() + ":8083/User/MailUser",
         {
           email: undefined,
           password: undefined,
@@ -55,7 +55,7 @@ describe("Account service", () => {
       );
 
       expect(HttpService.put).toHaveBeenCalledWith(
-        getServerURL() + ":8083/MailUser",
+        getServerURL() + ":8083/User/MailUser",
         {
           email: "mail",
           password: "password",
@@ -70,7 +70,7 @@ describe("Account service", () => {
       AccountService.createFacebookAccount("Token access");
 
       expect(HttpService.post).toHaveBeenCalledWith(
-        getServerURL() + ":8083/FacebookUser",
+        getServerURL() + ":8083/User/FacebookUser",
         {
           accessToken: "Token access",
         }
@@ -83,7 +83,7 @@ describe("Account service", () => {
       AccountService.connectFacebookAccount("Token access");
 
       expect(HttpService.put).toHaveBeenCalledWith(
-        getServerURL() + ":8083/FacebookUser",
+        getServerURL() + ":8083/User/FacebookUser",
         {
           accessToken: "Token access",
         }
@@ -96,7 +96,7 @@ describe("Account service", () => {
       AccountService.isAccountExist("My_test_id");
 
       expect(HttpService.get).toHaveBeenCalledWith(
-        getServerURL() + ":8083/MailUser/exist?mail=My_test_id"
+        getServerURL() + ":8083/User/MailUser/exist?mail=My_test_id"
       );
     });
   });

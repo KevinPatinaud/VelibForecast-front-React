@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { getServerURL } from "../../helper/Utils";
 import { Account } from "../../model/Account";
 import HttpService from "../Http/Http.service";
-import { StationService } from "./Station.service";
+import StationService from "./Station.service";
 
 jest.mock("../Http/Http.service");
 
@@ -43,8 +43,7 @@ describe("Station service", () => {
         } as AxiosResponse<any, any>)
       );
 
-      const stationService = new StationService();
-      const stations = await stationService.getStations();
+      const stations = await StationService.getStations();
 
       expect(HttpService.get).toHaveBeenCalledWith(
         getServerURL() + ":8083/stations"
@@ -110,8 +109,7 @@ describe("Station service", () => {
         } as AxiosResponse<any, any>)
       );
 
-      const stationService = new StationService();
-      const stations = await stationService.getStations();
+      const stations = await StationService.getStations();
 
       expect(HttpService.get).toHaveBeenCalledWith(
         getServerURL() + ":8083/stations"
@@ -215,11 +213,10 @@ describe("Station service", () => {
         } as AxiosResponse<any, any>)
       );
 
-      const stationService = new StationService();
-      const statuses = await stationService.getStatus();
+      const statuses = await StationService.getStatus();
 
       expect(HttpService.get).toHaveBeenCalledWith(
-        getServerURL() + ":8083/stationStates"
+        getServerURL() + ":8083/stations/states"
       );
 
       expect(statuses).toEqual([

@@ -1,7 +1,7 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
 import wrapper from "../../helper/test-context-builder";
 import Search from "./search";
-import { StationService } from "../../services/Station/Station.service";
+import StationService from "../../services/Station/Station.service";
 import { Station } from "../../model/Station";
 import { StationState } from "../../model/StationState";
 import { MapGoogleProps } from "./components/mapgoogle/mapgoogle.component";
@@ -75,12 +75,8 @@ jest.mock("./components/searchbar/searchBar", () => (props: SearchBarProps) => {
   );
 });
 
-const stationServiceMock = StationService as jest.MockedClass<
-  typeof StationService
->;
-
-stationServiceMock.prototype.getStations = jest.fn();
-stationServiceMock.prototype.getStatus = jest.fn();
+jest.spyOn(StationService, "getStations").mockImplementation();
+jest.spyOn(StationService, "getStatus").mockImplementation();
 
 const init = () => {
   const resStation = Promise.resolve([
@@ -100,9 +96,7 @@ const init = () => {
     } as Station,
   ]);
 
-  stationServiceMock.prototype.getStations = jest
-    .fn()
-    .mockReturnValue(resStation);
+  jest.spyOn(StationService, "getStations").mockReturnValue(resStation);
 
   const resStatus = Promise.resolve([
     {
@@ -117,7 +111,7 @@ const init = () => {
     } as StationState,
   ] as StationState[]);
 
-  stationServiceMock.prototype.getStatus = jest.fn().mockReturnValue(resStatus);
+  jest.spyOn(StationService, "getStatus").mockReturnValue(resStatus);
 };
 
 describe("<Search/>", () => {
@@ -126,12 +120,8 @@ describe("<Search/>", () => {
       init();
       const scr = render(<Search />, { wrapper });
 
-      await waitFor(() =>
-        expect(stationServiceMock.prototype.getStations).toBeCalled()
-      );
-      await waitFor(() =>
-        expect(stationServiceMock.prototype.getStatus).toBeCalled()
-      );
+      await waitFor(() => expect(StationService.getStations).toBeCalled());
+      await waitFor(() => expect(StationService.getStatus).toBeCalled());
     });
 
     describe("When the searchbar return a selected station", () => {
@@ -139,12 +129,8 @@ describe("<Search/>", () => {
         init();
         const scr = render(<Search />, { wrapper });
 
-        await waitFor(() =>
-          expect(stationServiceMock.prototype.getStations).toBeCalled()
-        );
-        await waitFor(() =>
-          expect(stationServiceMock.prototype.getStatus).toBeCalled()
-        );
+        await waitFor(() => expect(StationService.getStations).toBeCalled());
+        await waitFor(() => expect(StationService.getStatus).toBeCalled());
 
         userEvent.click(scr.getByTestId("searchbar_mock"));
 
@@ -163,12 +149,8 @@ describe("<Search/>", () => {
         init();
         const scr = render(<Search />, { wrapper });
 
-        await waitFor(() =>
-          expect(stationServiceMock.prototype.getStations).toBeCalled()
-        );
-        await waitFor(() =>
-          expect(stationServiceMock.prototype.getStatus).toBeCalled()
-        );
+        await waitFor(() => expect(StationService.getStations).toBeCalled());
+        await waitFor(() => expect(StationService.getStatus).toBeCalled());
 
         userEvent.click(scr.getByTestId("GMap_Mock"));
 
