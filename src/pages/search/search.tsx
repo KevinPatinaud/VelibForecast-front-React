@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Station } from "../../model/Station";
 import StationService from "../../services/Station/Station.service";
 import MapGoogle from "./components/mapgoogle/mapgoogle.component";
@@ -12,6 +12,7 @@ import { StationState } from "../../model/StationState";
 const Search: FC = () => {
   const [stations, setStations] = useState([] as Station[]);
   const [stationsStatus, setStationsStatus] = useState([] as StationState[]);
+  const needUpdate = useRef(false);
 
   const [idStationSelected, setIdStationSelected] = useState(
     undefined as unknown as number
@@ -29,6 +30,7 @@ const Search: FC = () => {
   useEffect(() => {
     const loadStates = async () => {
       setStationsStatus(await StationService.getStatus());
+      needUpdate.current = true;
     };
     loadStates();
     const interval = setInterval(loadStates, 60 * 1000);
@@ -36,20 +38,23 @@ const Search: FC = () => {
   }, []);
 
   useEffect(() => {
-    const stationsWithStates = [] as Station[];
+    if (needUpdate.current) {
+      const stationsWithStates = [] as Station[];
 
-    stations.forEach((station) => {
-      stationsStatus.forEach((state: StationState) => {
-        if (state.idStation === station.id) {
-          station.state = {} as StationState;
-          station.state.nmbBikeAvailable = state.nmbBikeAvailable;
-          station.state.nmbPlaceAvailable = state.nmbPlaceAvailable;
-        }
+      stations.forEach((station) => {
+        stationsStatus.forEach((state: StationState) => {
+          if (state.idStation === station.id) {
+            station.state = {} as StationState;
+            station.state.nmbBikeAvailable = state.nmbBikeAvailable;
+            station.state.nmbPlaceAvailable = state.nmbPlaceAvailable;
+          }
+        });
+        stationsWithStates.push(station);
       });
-      stationsWithStates.push(station);
-    });
-    setStations(stationsWithStates);
-  }, [stationsStatus]);
+      setStations(stationsWithStates);
+    }
+    needUpdate.current = false;
+  }, [stationsStatus, stations]);
 
   let stationSelected = undefined;
   for (let i = 0; i < stations.length; i++)
