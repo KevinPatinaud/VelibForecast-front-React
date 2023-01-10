@@ -5,14 +5,10 @@ import { Account } from "../../model/Account";
 import AccountProvider, {
   AccountContext,
 } from "../../provider/AccountProvider";
-import { AccountService } from "../../services/Account/Account.service";
+import AccountService from "../../services/Account/Account.service";
 import MyAccountMenu from "./MyAccountMenu";
 
-const accountService = AccountService as jest.MockedClass<
-  typeof AccountService
->;
-
-accountService.prototype.disconnect = jest.fn().mockReturnValue({});
+jest.spyOn(AccountService, "disconnect").mockReturnValue();
 
 describe("<MyAccountMenu/>", () => {
   describe("when is rendered and the user isn't logged and mouse hover and exit", () => {
@@ -112,7 +108,7 @@ describe("<MyAccountMenu/>", () => {
 
       userEvent.click(await scr.findByText("Me déconnecter"));
 
-      expect(accountService.prototype.disconnect).toHaveBeenCalled();
+      expect(AccountService.disconnect).toHaveBeenCalled();
     });
   });
 });

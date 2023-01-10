@@ -1,20 +1,26 @@
+import { FC, useContext } from "react";
 import FacebookLogin, {
   ReactFacebookFailureResponse,
   ReactFacebookLoginInfo,
 } from "react-facebook-login";
-import { AccountService } from "../../../../services/Account/Account.service";
+import { AccountContext } from "../../../../provider/AccountProvider";
+import AccountService from "../../../../services/Account/Account.service";
+import { Account } from "../../../../model/Account";
 
 export interface FaceBookLogProps {
   onSucceed: () => void;
 }
 
-const FaceBookSignIn = (props: FaceBookLogProps) => {
-  const accountService = new AccountService();
+const FaceBookSignIn: FC<FaceBookLogProps> = (props: FaceBookLogProps) => {
+  const { setAccount } = useContext(AccountContext);
 
   const callback = async (userInfo: ReactFacebookLoginInfo) => {
-    await accountService.connectFacebookAccount(userInfo.accessToken);
+    const res = await AccountService.connectFacebookAccount(
+      userInfo.accessToken
+    );
 
-    if (accountService.isAuthTokenSetted()) {
+    if (AccountService.isAuthTokenSetted() && !(res instanceof Number)) {
+      setAccount({ ...(res as Account), isConnected: true });
       props.onSucceed();
     }
   };

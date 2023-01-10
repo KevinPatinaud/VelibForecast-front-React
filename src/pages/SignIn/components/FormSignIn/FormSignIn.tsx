@@ -1,17 +1,16 @@
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { useIntl } from "react-intl";
 import Reaptcha from "reaptcha";
 import styles from "./FormSignIn.module.css";
 import { TranslationKeys } from "../../../../locales/constants";
 import { Account } from "../../../../model/Account";
-import { AccountService } from "../../../../services/Account/Account.service";
+import AccountService from "../../../../services/Account/Account.service";
 import InformationModal from "../../../../components/InformationModal/InformationModal";
+import { AccountContext } from "../../../../provider/AccountProvider";
 
 export interface FormSignInProps {
   onSucceed: () => void;
 }
-
-const accountService = new AccountService();
 
 const FormSignIn: FC<FormSignInProps> = (props) => {
   const [email, setEmail] = useState("");
@@ -20,6 +19,7 @@ const FormSignIn: FC<FormSignInProps> = (props) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const intl = useIntl();
+  const { setAccount } = useContext(AccountContext);
 
   const formIsValide = () => {
     return email !== "" &&
@@ -36,7 +36,7 @@ const FormSignIn: FC<FormSignInProps> = (props) => {
 
   const submitForm = async () => {
     if (formIsValide()) {
-      const result = await accountService.connectMailAccount(
+      const result = await AccountService.connectMailAccount(
         {
           email: email,
           password: password,
@@ -52,7 +52,8 @@ const FormSignIn: FC<FormSignInProps> = (props) => {
         setErrorMessage("This user doesn't exist");
       }
 
-      if (accountService.isAuthTokenSetted()) {
+      if (AccountService.isAuthTokenSetted() && !(result instanceof Number)) {
+        setAccount({ ...(result as Account), isConnected: true });
         props.onSucceed();
       }
     }

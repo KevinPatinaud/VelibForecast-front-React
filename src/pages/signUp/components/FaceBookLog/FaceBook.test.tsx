@@ -6,20 +6,15 @@ import {
   ReactFacebookLoginProps,
 } from "react-facebook-login";
 import wrapper from "../../../../helper/test-context-builder";
-import { AccountService } from "../../../../services/Account/Account.service";
+import { Account } from "../../../../model/Account";
+import AccountService from "../../../../services/Account/Account.service";
 import FaceBookLog from "./FaceBookLog";
 
 const mockChildComponent = jest.fn();
 
-jest.mock("../../../../services/Account/Account.service");
-
-const accountServiceMocked = AccountService as jest.MockedClass<
-  typeof AccountService
->;
-
-accountServiceMocked.prototype.createFacebookAccount = jest
-  .fn()
-  .mockReturnValue(Promise.resolve(true));
+jest
+  .spyOn(AccountService, "createFacebookAccount")
+  .mockReturnValue(Promise.resolve({} as Account));
 
 jest.mock("react-facebook-login", () => (props: ReactFacebookLoginProps) => {
   mockChildComponent(props);
@@ -55,9 +50,9 @@ describe("<FaceBookLog>", () => {
       const scr = render(<FaceBookLog onSucceed={jest.fn()} />, { wrapper });
       userEvent.click(scr.getByTestId("FacebookLogin"));
 
-      expect(
-        accountServiceMocked.prototype.createFacebookAccount
-      ).toHaveBeenCalledWith("accessToken");
+      expect(AccountService.createFacebookAccount).toHaveBeenCalledWith(
+        "accessToken"
+      );
     });
   });
 

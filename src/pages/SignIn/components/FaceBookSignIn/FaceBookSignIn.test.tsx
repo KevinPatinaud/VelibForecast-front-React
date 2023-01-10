@@ -6,26 +6,17 @@ import {
   ReactFacebookLoginProps,
 } from "react-facebook-login";
 import wrapper from "../../../../helper/test-context-builder";
-import { AccountService } from "../../../../services/Account/Account.service";
+import { Account } from "../../../../model/Account";
+import AccountService from "../../../../services/Account/Account.service";
 import FaceBookSignIn from "./FaceBookSignIn";
 
 const mockChildComponent = jest.fn();
 
 jest.mock("../../../../services/Account/Account.service");
 
-const accountServiceMocked = AccountService as jest.MockedClass<
-  typeof AccountService
->;
-
-accountServiceMocked.prototype.connectFacebookAccount = jest
-  .fn()
-  .mockReturnValue(
-    Promise.resolve({ status: 200, data: { JWT: "jwt token" } })
-  );
-
-accountServiceMocked.prototype.isAuthTokenSetted = jest
-  .fn()
-  .mockReturnValue(true);
+jest
+  .spyOn(AccountService, "connectFacebookAccount")
+  .mockReturnValue(Promise.resolve({} as Account));
 
 jest.mock("react-facebook-login", () => (props: ReactFacebookLoginProps) => {
   mockChildComponent(props);
@@ -62,9 +53,9 @@ describe("<FaceBookSignIn>", () => {
       const scr = render(<FaceBookSignIn onSucceed={onSucceed} />, { wrapper });
       userEvent.click(scr.getByTestId("FacebookLogin"));
 
-      expect(
-        accountServiceMocked.prototype.connectFacebookAccount
-      ).toHaveBeenCalledWith("accessToken");
+      expect(AccountService.connectFacebookAccount).toHaveBeenCalledWith(
+        "accessToken"
+      );
     });
   });
 

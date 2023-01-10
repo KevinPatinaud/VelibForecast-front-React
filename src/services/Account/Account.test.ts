@@ -1,43 +1,43 @@
 import { AxiosResponse } from "axios";
 import { getServerURL } from "../../helper/Utils";
 import { Account } from "../../model/Account";
-import { HttpService } from "../Http/Http.service";
-import { AccountService } from "./Account.service";
+import HttpService from "../Http/Http.service";
+import AccountService from "./Account.service";
 
-jest.mock("../Http/Http.service");
+jest.spyOn(HttpService, "post").mockImplementation(() => {
+  return Promise.resolve({
+    data: { JWT: "JWT TOKEN" },
+    status: 200,
+  } as AxiosResponse<any, any>);
+});
 
-const httpService = HttpService as jest.MockedClass<typeof HttpService>;
+jest.spyOn(HttpService, "put").mockImplementation(() => {
+  return Promise.resolve({
+    data: { JWT: "JWT TOKEN" },
+    status: 200,
+  } as AxiosResponse<any, any>);
+});
 
-httpService.prototype.post = jest
-  .fn()
-  .mockReturnValue({ data: { JWT: "JWT TOKEN" }, status: 200 } as AxiosResponse<
-    any,
-    any
-  >);
+jest.spyOn(HttpService, "get").mockImplementation(() => {
+  return Promise.resolve({
+    data: { JWT: "JWT TOKEN" },
+    status: 200,
+  } as AxiosResponse<any, any>);
+});
 
-httpService.prototype.put = jest
-  .fn()
-  .mockReturnValue({ data: { JWT: "JWT TOKEN" }, status: 200 } as AxiosResponse<
-    any,
-    any
-  >);
+jest.spyOn(HttpService, "isAuthTokenSetted").mockImplementation(() => {
+  return false;
+});
 
-httpService.prototype.get = jest
-  .fn()
-  .mockReturnValue({} as AxiosResponse<any, any>);
-
-httpService.prototype.isAuthTokenSetted = jest.fn().mockReturnValue(false);
-
-httpService.prototype.setAuthToken = jest.fn().mockReturnValue({});
+jest.spyOn(HttpService, "setAuthToken").mockImplementation();
 
 describe("Account service", () => {
   describe("when createMailAccount service is called", () => {
     it("should call http service", () => {
-      const accountService = new AccountService();
-      accountService.createMailAccount({} as Account, "captcha token");
+      AccountService.createMailAccount({} as Account, "captcha token");
 
-      expect(httpService.prototype.post).toHaveBeenCalledWith(
-        getServerURL() + ":8083/MailUser",
+      expect(HttpService.post).toHaveBeenCalledWith(
+        getServerURL() + ":8083/User/MailUser",
         {
           email: undefined,
           password: undefined,
@@ -49,14 +49,13 @@ describe("Account service", () => {
 
   describe("when connectMailAccount service is called", () => {
     it("should call http service", () => {
-      const accountService = new AccountService();
-      accountService.connectMailAccount(
+      AccountService.connectMailAccount(
         { email: "mail", password: "password" } as Account,
         "captcha token"
       );
 
-      expect(httpService.prototype.put).toHaveBeenCalledWith(
-        getServerURL() + ":8083/MailUser",
+      expect(HttpService.put).toHaveBeenCalledWith(
+        getServerURL() + ":8083/User/MailUser",
         {
           email: "mail",
           password: "password",
@@ -68,11 +67,10 @@ describe("Account service", () => {
 
   describe("when createFacebookAccount service is called", () => {
     it("should call http service", () => {
-      const accountService = new AccountService();
-      accountService.createFacebookAccount("Token access");
+      AccountService.createFacebookAccount("Token access");
 
-      expect(httpService.prototype.post).toHaveBeenCalledWith(
-        getServerURL() + ":8083/FacebookUser",
+      expect(HttpService.post).toHaveBeenCalledWith(
+        getServerURL() + ":8083/User/FacebookUser",
         {
           accessToken: "Token access",
         }
@@ -82,11 +80,10 @@ describe("Account service", () => {
 
   describe("when connectFacebookAccount service is called", () => {
     it("should call http service", () => {
-      const accountService = new AccountService();
-      accountService.connectFacebookAccount("Token access");
+      AccountService.connectFacebookAccount("Token access");
 
-      expect(httpService.prototype.put).toHaveBeenCalledWith(
-        getServerURL() + ":8083/FacebookUser",
+      expect(HttpService.put).toHaveBeenCalledWith(
+        getServerURL() + ":8083/User/FacebookUser",
         {
           accessToken: "Token access",
         }
@@ -96,30 +93,19 @@ describe("Account service", () => {
 
   describe("when isAccountExist service is called", () => {
     it("should call http service", () => {
-      const accountService = new AccountService();
-      accountService.isAccountExist("My_test_id");
+      AccountService.isAccountExist("My_test_id");
 
-      expect(httpService.prototype.get).toHaveBeenCalledWith(
-        getServerURL() + ":8083/MailUser/exist?mail=My_test_id"
+      expect(HttpService.get).toHaveBeenCalledWith(
+        getServerURL() + ":8083/User/MailUser/exist?mail=My_test_id"
       );
-    });
-  });
-
-  describe("when isAuthTokenSetted service is called", () => {
-    it("should call http service", () => {
-      const accountService = new AccountService();
-      accountService.isAuthTokenSetted();
-
-      expect(httpService.prototype.isAuthTokenSetted).toHaveBeenCalled();
     });
   });
 
   describe("when disconnect service is called", () => {
     it("should call http service", () => {
-      const accountService = new AccountService();
-      accountService.disconnect();
+      AccountService.disconnect();
 
-      expect(httpService.prototype.setAuthToken).toHaveBeenCalledWith();
+      expect(HttpService.setAuthToken).toHaveBeenCalledWith();
     });
   });
 });

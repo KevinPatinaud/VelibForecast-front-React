@@ -1,10 +1,18 @@
-import { faBicycle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBicycle,
+  faHeartCircleMinus,
+  faHeartCirclePlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FC } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { Station } from "../../../../model/Station";
 import styles from "./stationDetails.module.css";
 import { useIntl } from "react-intl";
 import { TranslationKeys } from "../../../../locales/constants";
+import { AccountContext } from "../../../../provider/AccountProvider";
+import AccountService from "../../../../services/Account/Account.service";
+import StationService from "../../../../services/Station/Station.service";
+import { StationState } from "../../../../model/StationState";
 
 export interface StationDetailsProps {
   station: Station;
@@ -12,10 +20,93 @@ export interface StationDetailsProps {
 
 const StationDetails: FC<StationDetailsProps> = (props) => {
   const intl = useIntl();
+  const { account, setAccount } = useContext(AccountContext);
+  const [isUserFavoriteStation] = useState(() => {
+    let res = false;
+    if (account.isConnected && account.favoriteStations) {
+      for (let i = 0; i < account.favoriteStations.length; i++) {
+        if (props.station.id === account.favoriteStations.at(i)?.id) {
+          res = true;
+        }
+      }
+    }
+    return res;
+  });
+
+  const [statusIn1Hour, setStatusIn1Hour] = useState({} as StationState);
+  const [statusIn2Hour, setStatusIn2Hour] = useState({} as StationState);
+  const [statusIn3Hour, setStatusIn3Hour] = useState({} as StationState);
+
+  useEffect(() => {
+    const fnc = async () => {
+      setStatusIn1Hour(
+        await StationService.getStatusInFutur(props.station.id, 60)
+      );
+    };
+    fnc();
+  }, [props.station.id]);
+
+  useEffect(() => {
+    const fnc = async () => {
+      setStatusIn2Hour(
+        await StationService.getStatusInFutur(props.station.id, 120)
+      );
+    };
+    fnc();
+  }, [props.station.id]);
+
+  useEffect(() => {
+    const fnc = async () => {
+      setStatusIn3Hour(
+        await StationService.getStatusInFutur(props.station.id, 180)
+      );
+    };
+    fnc();
+  }, [props.station.id]);
 
   return (
     <div>
-      <div className={styles.stationName}>{props.station.name}</div>
+      <div className={styles.titleStation}>
+        <div className={styles.stationName}>{props.station.name}</div>
+        {account.isConnected && !isUserFavoriteStation && (
+          <div
+            className={styles.addFavoriteStation}
+            onClick={() => {
+              AccountService.addFavoriteStation(props.station);
+              const favStations = account.favoriteStations as Station[];
+              favStations?.push(props.station);
+              setAccount({
+                ...account,
+                favoriteStations: [...favStations],
+              });
+            }}
+          >
+            <FontAwesomeIcon icon={faHeartCirclePlus} />
+          </div>
+        )}
+        {account.isConnected && isUserFavoriteStation && (
+          <div
+            className={styles.removeFavoriteStation}
+            onClick={() => {
+              AccountService.removeFavoriteStation(props.station);
+              const favStations = [] as Station[];
+
+              (account.favoriteStations as Station[]).forEach((station) => {
+                if (station.id !== props.station.id) {
+                  favStations.push(station);
+                }
+              });
+
+              setAccount({
+                ...account,
+                favoriteStations: [...favStations],
+              });
+            }}
+          >
+            <FontAwesomeIcon icon={faHeartCircleMinus} />
+          </div>
+        )}
+      </div>
       <table className={styles.detailTable}>
         <thead>
           <tr>
@@ -42,8 +133,8 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
             <td className={styles.firstCol}>
               {intl.formatMessage({ id: TranslationKeys.IN_1_HOUR })}
             </td>
-            <td></td>
-            <td></td>
+            <td>{statusIn1Hour.nmbBikeAvailable}</td>
+            <td>{statusIn1Hour.nmbPlaceAvailable}</td>
           </tr>
           <tr className={styles.highlightLine}>
             <td className={styles.firstCol}>
@@ -51,8 +142,8 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
                 .formatMessage({ id: TranslationKeys.IN_X_HOURS })
                 .replace("{X}", "2")}
             </td>
-            <td></td>
-            <td></td>
+            <td>{statusIn2Hour.nmbBikeAvailable}</td>
+            <td>{statusIn2Hour.nmbPlaceAvailable}</td>
           </tr>
           <tr>
             <td className={styles.firstCol}>
@@ -60,8 +151,8 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
                 .formatMessage({ id: TranslationKeys.IN_X_HOURS })
                 .replace("{X}", "3")}
             </td>
-            <td></td>
-            <td></td>
+            <td>{statusIn3Hour.nmbBikeAvailable}</td>
+            <td>{statusIn3Hour.nmbPlaceAvailable}</td>
           </tr>
         </tbody>
       </table>

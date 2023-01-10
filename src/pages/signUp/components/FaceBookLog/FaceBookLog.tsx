@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import FacebookLogin, {
   ReactFacebookFailureResponse,
   ReactFacebookLoginInfo,
 } from "react-facebook-login";
 import { useIntl } from "react-intl";
 import { TranslationKeys } from "../../../../locales/constants";
-import { AccountService } from "../../../../services/Account/Account.service";
+import { Account } from "../../../../model/Account";
+import { AccountContext } from "../../../../provider/AccountProvider";
+import AccountService from "../../../../services/Account/Account.service";
 import styles from "./FaceBookLog.module.css";
 
 export interface FaceBookLogProps {
@@ -14,11 +16,12 @@ export interface FaceBookLogProps {
 
 const FaceBookLog = (props: FaceBookLogProps) => {
   const [errorMessage, setErrorMessage] = useState(false);
-  const accountService = new AccountService();
   const intl = useIntl();
 
+  const { setAccount } = useContext(AccountContext);
+
   const callback = async (userInfo: ReactFacebookLoginInfo) => {
-    const result = await accountService.createFacebookAccount(
+    const result = await AccountService.createFacebookAccount(
       userInfo.accessToken
     );
 
@@ -26,7 +29,8 @@ const FaceBookLog = (props: FaceBookLogProps) => {
       setErrorMessage(true);
     }
 
-    if (accountService.isAuthTokenSetted()) {
+    if (AccountService.isAuthTokenSetted() && !(result instanceof Number)) {
+      setAccount({ ...(result as Account), isConnected: true });
       props.onSucceed();
     }
   };
