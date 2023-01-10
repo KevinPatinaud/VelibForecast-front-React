@@ -13,25 +13,34 @@ import { AccountContext } from "../../../../provider/AccountProvider";
 import AccountService from "../../../../services/Account/Account.service";
 import StationService from "../../../../services/Station/Station.service";
 import { StationState } from "../../../../model/StationState";
+import { Account } from "../../../../model/Account";
 
 export interface StationDetailsProps {
   station: Station;
 }
 
+const isFavStation = (account: Account, station: Station) => {
+  let res = false;
+  if (account.isConnected && account.favoriteStations) {
+    for (let i = 0; i < account.favoriteStations.length; i++) {
+      if (station.id === account.favoriteStations.at(i)?.id) {
+        res = true;
+      }
+    }
+  }
+  return res;
+};
+
 const StationDetails: FC<StationDetailsProps> = (props) => {
   const intl = useIntl();
   const { account, setAccount } = useContext(AccountContext);
-  const [isUserFavoriteStation] = useState(() => {
-    let res = false;
-    if (account.isConnected && account.favoriteStations) {
-      for (let i = 0; i < account.favoriteStations.length; i++) {
-        if (props.station.id === account.favoriteStations.at(i)?.id) {
-          res = true;
-        }
-      }
-    }
-    return res;
+  const [isUserFavoriteStation, setIsUserFavoriteStation] = useState(() => {
+    return isFavStation(account, props.station);
   });
+
+  useEffect(() => {
+    setIsUserFavoriteStation(isFavStation(account, props.station));
+  }, [account, props.station]);
 
   const [statusIn1Hour, setStatusIn1Hour] = useState({} as StationState);
   const [statusIn2Hour, setStatusIn2Hour] = useState({} as StationState);
