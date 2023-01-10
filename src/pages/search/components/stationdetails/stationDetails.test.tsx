@@ -3,8 +3,11 @@ import { Station } from "../../../../model/Station";
 import StationDetails from "./stationDetails";
 import wrapper from "../../../../helper/test-context-builder";
 import StationService from "../../../../services/Station/Station.service";
+import { StationState } from "../../../../model/StationState";
 
-jest.spyOn(StationService, "getStatusInFutur").mockResolvedValue({});
+jest
+  .spyOn(StationService, "getStatusInFutur")
+  .mockResolvedValue({} as StationState);
 
 describe("<StationDetails>", () => {
   describe("When is rendering", () => {
