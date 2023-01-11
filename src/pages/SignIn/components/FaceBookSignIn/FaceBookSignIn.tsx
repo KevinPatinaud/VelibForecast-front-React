@@ -25,9 +25,7 @@ const FaceBookSignIn: FC<FaceBookLogProps> = (props: FaceBookLogProps) => {
     }
   };
 
-  const onFailure = (response: ReactFacebookFailureResponse) => {
-    console.log("fail");
-  };
+  const onFailure = (response: ReactFacebookFailureResponse) => {};
 
   return (
     <FacebookLogin

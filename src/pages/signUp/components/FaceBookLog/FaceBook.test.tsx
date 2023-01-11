@@ -55,15 +55,4 @@ describe("<FaceBookLog>", () => {
       );
     });
   });
-
-  describe("When the user meet some difficulty to be logged", () => {
-    it("to define", () => {
-      const logSpy = jest.spyOn(console, "log");
-
-      const scr = render(<FaceBookLog onSucceed={jest.fn()} />, { wrapper });
-      userEvent.click(scr.getByTestId("FacebookLoginFail"));
-
-      expect(logSpy).toHaveBeenCalledWith("fail");
-    });
-  });
 });

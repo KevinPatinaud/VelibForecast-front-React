@@ -2,27 +2,34 @@ import { FC, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "./GlobalMessage.module.css";
 
-const GlobalMessage: FC = () => {
-  const { state } = useLocation();
+export interface GlobalMessageProps {
+  duration?: number;
+}
+
+const GlobalMessage: FC<GlobalMessageProps> = (props) => {
   const [msg, setMsg] = useState("");
+  const locationState = useLocation().state;
 
   useEffect(() => {
     if (msg !== "") {
-      setTimeout(() => {
-        setMsg("");
-        window.history.replaceState({}, document.title);
-      }, 10 * 1000);
+      setTimeout(
+        () => {
+          setMsg("");
+          window.history.replaceState({}, document.title);
+        },
+        props.duration ? props.duration : 10 * 1000
+      );
     }
-  }, [msg]);
+  }, [msg, props.duration]);
 
   useEffect(() => {
-    if (state !== null) {
-      const { message } = state;
+    if (locationState !== null) {
+      const { message } = locationState;
       if (message !== null && message !== "") setMsg(message);
     }
-  }, [state]);
+  }, [locationState]);
 
-  if (state !== null && msg !== "")
+  if (locationState !== null && msg !== "")
     return <div className={styles.GlobalMessage}>{msg}</div>;
 
   return <></>;
