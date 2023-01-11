@@ -1,0 +1,23 @@
+.favStatList {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.stationLink {
+  margin-left: 15px;
+  margin-right: 15px;
+  cursor: pointer;
+  color: #148ad0;
+}
+
+.stationLink:hover {
+  text-decoration: underline;
+}
+
+.stationLinkSelected {
+  margin-left: 15px;
+  margin-right: 15px;
+  color: black;
+  cursor: default;
+}

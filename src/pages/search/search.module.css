@@ -28,6 +28,11 @@
   margin: 30px auto;
 }
 
+.favoriteStations {
+  display: flex;
+  justify-content: center;
+}
+
 @media only screen and (max-width: 800px) {
   .pageContent {
     display: block;
