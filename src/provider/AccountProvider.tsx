@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { FC } from "react";
 import { Account } from "../model/Account";
+import AccountService from "../services/Account/Account.service";
 
 export const AccountContext = React.createContext({
   account: {
@@ -10,7 +11,10 @@ export const AccountContext = React.createContext({
 });
 
 const AccountProvider: FC<{ children: JSX.Element }> = ({ children }) => {
-  const [account, setAccount] = useState({ isConnected: false } as Account);
+  const [account, setAccount] = useState({
+    isConnected: false,
+  } as Account);
+
   const value = useMemo(() => ({ account, setAccount }), [account]);
 
   return (

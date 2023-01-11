@@ -55,15 +55,20 @@ const interpretConection = (result: AxiosResponse<any, any>) => {
   if (result.status === 200) {
     const jwt = result?.data.JWT as String;
     HttpService.setAuthToken(jwt.toString());
-
-    const payload = JSON.parse(window.atob(jwt.split(".")[1]));
-
-    const user = {
-      id: payload.id,
-      favoriteStations: interpretJSONStationReceive(payload.favoriteStations),
-    } as Account;
-    return user;
+    return getUserFromJWT(jwt.toString());
   } else return result.status;
+};
+
+const getUserFromJWT = (jwt: string) => {
+  if (jwt === undefined) return {} as Account;
+
+  const payload = JSON.parse(window.atob(jwt.split(".")[1]));
+
+  const user = {
+    id: payload.id,
+    favoriteStations: interpretJSONStationReceive(payload.favoriteStations),
+  } as Account;
+  return user;
 };
 
 const interpretJSONStationReceive = (favoriteStations: any) => {
@@ -110,10 +115,6 @@ const removeFavoriteStation = (station: Station) => {
   });
 };
 
-const getFavoriteStations = () => {
-  return [] as Station[];
-};
-
 const AccountService = {
   connectMailAccount,
   connectFacebookAccount,
@@ -124,7 +125,6 @@ const AccountService = {
   disconnect,
   addFavoriteStation,
   removeFavoriteStation,
-  getFavoriteStations,
 };
 
 export default AccountService;

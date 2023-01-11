@@ -23,16 +23,14 @@ const setAuthToken = (token?: string) => {
 };
 
 const isAuthTokenSetted = () => {
-  return axios.defaults.headers.common["Authorization"] != null;
-};
+  if (axios.defaults.headers.common["Authorization"]) return true;
 
-const init = () => {
   if (localStorage.getItem("Authorization")) {
     setAuthToken(localStorage.getItem("Authorization") as string);
   }
-};
 
-init();
+  return axios.defaults.headers.common["Authorization"] != null;
+};
 
 const HTTPService = {
   get,

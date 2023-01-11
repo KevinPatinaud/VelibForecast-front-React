@@ -14,6 +14,8 @@ const SearchBar: FC<SearchBarProps> = (props) => {
   const [displayList, setDisplayList] = useState(false);
   const [inputVal, setInputVal] = useState("");
 
+  console.log(props.stations.length);
+
   return (
     <div
       data-testid="searchBar_container"
@@ -39,37 +41,35 @@ const SearchBar: FC<SearchBarProps> = (props) => {
         icon={faMagnifyingGlass}
       />
 
-      {displayList && (
+      {displayList && props.stations.length !== 0 && (
         <div className={styles.choicesList}>
-          {props.stations.length === 0
-            ? "No results found"
-            : props.stations
-                .filter(
-                  (s) =>
-                    s.name
+          {props.stations
+            .filter(
+              (s) =>
+                s.name
+                  .toLowerCase()
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "")
+                  .indexOf(
+                    inputVal
                       .toLowerCase()
                       .normalize("NFD")
                       .replace(/[\u0300-\u036f]/g, "")
-                      .indexOf(
-                        inputVal
-                          .toLowerCase()
-                          .normalize("NFD")
-                          .replace(/[\u0300-\u036f]/g, "")
-                      ) >= 0
-                )
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map((station) => (
-                  <div
-                    key={station.id}
-                    className={styles.choice}
-                    onClick={() => {
-                      props.onSelect(station);
-                      setInputVal(station.name);
-                    }}
-                  >
-                    {station.name}
-                  </div>
-                ))}
+                  ) >= 0
+            )
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((station) => (
+              <div
+                key={station.id}
+                className={styles.choice}
+                onClick={() => {
+                  props.onSelect(station);
+                  setInputVal(station.name);
+                }}
+              >
+                {station.name}
+              </div>
+            ))}
         </div>
       )}
     </div>

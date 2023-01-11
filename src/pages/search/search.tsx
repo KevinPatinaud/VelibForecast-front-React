@@ -8,6 +8,7 @@ import styles from "./search.module.css";
 import { useIntl } from "react-intl";
 import { TranslationKeys } from "../../locales/constants";
 import { StationState } from "../../model/StationState";
+import FavoriteStations from "./components/favoriteStations/FavoriteStations";
 
 const Search: FC = () => {
   const [stations, setStations] = useState([] as Station[]);
@@ -71,6 +72,15 @@ const Search: FC = () => {
           }}
         />
       </div>
+      <div className={styles.favoriteStations}>
+        <FavoriteStations
+          idStationSelected={idStationSelected}
+          onSelect={(station: Station) => {
+            setIdStationSelected(station.id);
+          }}
+        />
+      </div>
+
       <div className={styles.pageContent}>
         <div
           className={
