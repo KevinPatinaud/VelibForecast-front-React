@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { FC } from "react";
 import { Account } from "../model/Account";
-import AccountService from "../services/Account/Account.service";
 
 export const AccountContext = React.createContext({
   account: {
