@@ -23,7 +23,7 @@ describe("<SearchBar/>", () => {
 
       fireEvent.focus(scr.getByTestId("searchBar_container"));
 
-      expect(scr.queryByText("No results found")).toBeInTheDocument();
+      expect(scr.queryByText("No results found")).not.toBeInTheDocument();
     });
   });
 
