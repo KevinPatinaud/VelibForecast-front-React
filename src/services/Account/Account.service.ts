@@ -6,17 +6,20 @@ import HTTPService from "../Http/Http.service";
 import HttpService from "../Http/Http.service";
 
 const connectMailAccount = async (account: Account, captchaToken: String) => {
-  const result = await HttpService.put(getServerURL() + ":8083/User/MailUser", {
-    email: account.email,
-    password: account.password,
-    captchaToken: captchaToken,
-  });
+  const result = await HttpService.put(
+    getServerURL() + ":8083/api/user/mailuser",
+    {
+      email: account.email,
+      password: account.password,
+      captchaToken: captchaToken,
+    }
+  );
 
   return interpretConection(result);
 };
 const connectFacebookAccount = async (accessToken: String) => {
   const result = await HttpService.put(
-    getServerURL() + ":8083/User/FacebookUser",
+    getServerURL() + ":8083/api/user/facebookuser",
     {
       accessToken: accessToken,
     }
@@ -27,7 +30,7 @@ const connectFacebookAccount = async (accessToken: String) => {
 
 const createMailAccount = async (account: Account, captchaToken: String) => {
   const result = await HttpService.post(
-    getServerURL() + ":8083/User/MailUser",
+    getServerURL() + ":8083/api/user/mailuser",
     {
       email: account.email,
       password: account.password,
@@ -40,7 +43,7 @@ const createMailAccount = async (account: Account, captchaToken: String) => {
 
 const createFacebookAccount = async (accessToken: String) => {
   const result = await HttpService.post(
-    getServerURL() + ":8083/User/FacebookUser",
+    getServerURL() + ":8083/api/user/facebookuser",
     {
       accessToken: accessToken,
     }
@@ -90,7 +93,7 @@ const interpretJSONStationReceive = (favoriteStations: any) => {
 const isAccountExist = async (id: String) => {
   return (
     await HttpService.get(
-      getServerURL() + ":8083/User/MailUser/exist?mail=" + id
+      getServerURL() + ":8083/api/user/ismailalreadyrecorded?mail=" + id
     )
   )?.data;
 };
@@ -104,13 +107,13 @@ const disconnect = () => {
 };
 
 const addFavoriteStation = (station: Station) => {
-  HTTPService.put(getServerURL() + ":8083/User/addFavoriteStation", {
+  HTTPService.put(getServerURL() + ":8083/api/user/addfavoritestation", {
     id_station: station.id,
   });
 };
 
 const removeFavoriteStation = (station: Station) => {
-  HTTPService.put(getServerURL() + ":8083/User/removeFavoriteStation", {
+  HTTPService.put(getServerURL() + ":8083/api/user/removefavoritestation", {
     id_station: station.id,
   });
 };
