@@ -14,8 +14,6 @@ const SearchBar: FC<SearchBarProps> = (props) => {
   const [displayList, setDisplayList] = useState(false);
   const [inputVal, setInputVal] = useState("");
 
-  console.log(props.stations.length);
-
   return (
     <div
       data-testid="searchBar_container"

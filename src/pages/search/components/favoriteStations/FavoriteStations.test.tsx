@@ -1,20 +1,24 @@
 import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { Account } from "../../../../model/Account";
 import { Station } from "../../../../model/Station";
-import StationDetails from "./stationDetails";
-import wrapper from "../../../../helper/test-context-builder";
-import StationService from "../../../../services/Station/Station.service";
 import { StationState } from "../../../../model/StationState";
 import { AccountContext } from "../../../../provider/AccountProvider";
-import { Account } from "../../../../model/Account";
+import FavoriteStations from "./FavoriteStations";
 
-jest
-  .spyOn(StationService, "getStatusInFutur")
-  .mockResolvedValue({} as StationState);
+describe("<FavoriteStations/>", () => {
+  describe("when its rendered", () => {
+    it("should match snapshot", () => {
+      const scr = render(<FavoriteStations onSelect={jest.fn()} />);
+      expect(scr).toMatchSnapshot();
+    });
+  });
 
-describe("<StationDetails>", () => {
-  describe("When is rendering", () => {
-    it("should be displayed", () => {
-      const tree = render(
+  describe("when a station is selected", () => {
+    it("should call onSelect with his id", () => {
+      const onSelected = jest.fn();
+
+      const scr = render(
         <AccountContext.Provider
           value={{
             account: {
@@ -41,22 +45,15 @@ describe("<StationDetails>", () => {
             setAccount: jest.fn(),
           }}
         >
-          <StationDetails
-            station={
-              {
-                id: 123,
-                name: "Benjamin Godard - Victor Hugo",
-                lat: 48.865983,
-                lng: 2.275725,
-                capacity: 35,
-              } as Station
-            }
-          />
-        </AccountContext.Provider>,
-        { wrapper }
+          <FavoriteStations idStationSelected={456} onSelect={onSelected} />
+        </AccountContext.Provider>
       );
+      expect(scr.getByText("123")).toBeInTheDocument();
+      expect(scr.getByText("456")).toBeInTheDocument();
 
-      expect(tree).toMatchSnapshot();
+      userEvent.click(scr.getByText("123"));
+
+      expect(onSelected).toHaveBeenCalled();
     });
   });
 });

@@ -4,7 +4,9 @@ import { StationState } from "../../model/StationState";
 import HttpService from "../Http/Http.service";
 
 const getStations = async () => {
-  const httpResponse = await HttpService.get(getServerURL() + ":8083/stations");
+  const httpResponse = await HttpService.get(
+    getServerURL() + ":8083/api/station/"
+  );
 
   const stations = [];
   for (let i = 0; i < httpResponse.data.length; i++) {
@@ -29,7 +31,7 @@ const getStations = async () => {
 
 const getStatus = async () => {
   const httpResponse = await HttpService.get(
-    getServerURL() + ":8083/stations/states"
+    getServerURL() + ":8083/api/station/states"
   );
 
   const states = [];
@@ -47,7 +49,7 @@ const getStatus = async () => {
 const getStatusInFutur = async (idStation: Number, inMinutes: Number) => {
   const httpResponse = await HttpService.get(
     getServerURL() +
-      ":8083/station/" +
+      ":8083/api/station/" +
       idStation +
       "/state?inMinutes=" +
       inMinutes
