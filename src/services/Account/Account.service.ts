@@ -19,12 +19,11 @@ const connectMailAccount = async (account: Account, captchaToken: String) => {
   return interpretConection(result);
 };
 const connectFacebookAccount = async (accessToken: String) => {
+  HTTPService.setHeader("facebook_access_token", accessToken.toString());
   const result = await HttpService.put(
-    getServerURL() + ":8083/api/user/facebookuser",
-    {
-      accessToken: accessToken,
-    }
+    getServerURL() + ":8083/api/user/facebookuser"
   );
+  HTTPService.removeHeader("facebook_access_token");
 
   return interpretConection(result);
 };
