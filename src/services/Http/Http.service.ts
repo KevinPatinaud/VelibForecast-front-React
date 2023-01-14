@@ -8,7 +8,7 @@ const post = async (url: string, data: any) => {
   return await axios.post(url, data, { validateStatus: () => true });
 };
 
-const put = async (url: string, data: any) => {
+const put = async (url: string, data?: any) => {
   return await axios.put(url, data, { validateStatus: () => true });
 };
 
@@ -27,12 +27,20 @@ const putAuth = async (
   });
 };
 
+const setHeader = (key: string, value: string) => {
+  axios.defaults.headers.common[key] = value;
+};
+
+const removeHeader = (key: string) => {
+  delete axios.defaults.headers.common[key];
+};
+
 const setAuthToken = (token?: string) => {
   if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    setHeader("Authorization", `Bearer ${token}`);
     localStorage.setItem("Authorization", token.toString());
   } else {
-    delete axios.defaults.headers.common["Authorization"];
+    removeHeader("Authorization");
     localStorage.removeItem("Authorization");
   }
 };
@@ -53,6 +61,8 @@ const HTTPService = {
   put,
   putAuth,
   setAuthToken,
+  setHeader,
+  removeHeader,
   isAuthTokenSetted,
 };
 
