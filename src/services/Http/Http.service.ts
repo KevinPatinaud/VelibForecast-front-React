@@ -12,6 +12,21 @@ const put = async (url: string, data: any) => {
   return await axios.put(url, data, { validateStatus: () => true });
 };
 
+const putAuth = async (
+  url: string,
+  data: any,
+  user: string,
+  password: string
+) => {
+  return await axios.put(url, data, {
+    validateStatus: () => true,
+    auth: {
+      username: user,
+      password: password,
+    },
+  });
+};
+
 const setAuthToken = (token?: string) => {
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -36,6 +51,7 @@ const HTTPService = {
   get,
   post,
   put,
+  putAuth,
   setAuthToken,
   isAuthTokenSetted,
 };

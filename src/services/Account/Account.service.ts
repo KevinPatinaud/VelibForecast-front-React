@@ -6,13 +6,14 @@ import HTTPService from "../Http/Http.service";
 import HttpService from "../Http/Http.service";
 
 const connectMailAccount = async (account: Account, captchaToken: String) => {
-  const result = await HttpService.put(
+  const result = await HttpService.putAuth(
     getServerURL() + ":8083/api/user/mailuser",
     {
       email: account.email,
-      password: account.password,
       captchaToken: captchaToken,
-    }
+    },
+    account.email as string,
+    account.password as string
   );
 
   return interpretConection(result);
