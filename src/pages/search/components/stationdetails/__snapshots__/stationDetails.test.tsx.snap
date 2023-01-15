@@ -16,6 +16,7 @@ Object {
           </div>
           <div
             class="removeFavoriteStation"
+            data-testid="remove_fav_station"
           >
             <svg
               aria-hidden="true"
@@ -126,6 +127,7 @@ Object {
         </div>
         <div
           class="removeFavoriteStation"
+          data-testid="remove_fav_station"
         >
           <svg
             aria-hidden="true"

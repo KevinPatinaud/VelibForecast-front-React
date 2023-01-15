@@ -18,7 +18,7 @@ describe("HTTPservice", () => {
   });
 
   describe("When post function is called", () => {
-    it("should call axios", async () => {
+    it("should call post axios", async () => {
       axios.post = jest.fn().mockReturnValue({
         data: { AxiosResponse: "AxiosResponse" },
       } as AxiosResponse<any, any>);
@@ -28,6 +28,50 @@ describe("HTTPservice", () => {
       });
 
       expect(axios.post).toHaveBeenCalled();
+      expect(response).toEqual({ data: { AxiosResponse: "AxiosResponse" } });
+    });
+  });
+
+  describe("When put function is called", () => {
+    it("should call put axios", async () => {
+      axios.put = jest.fn().mockReturnValue({
+        data: { AxiosResponse: "AxiosResponse" },
+      } as AxiosResponse<any, any>);
+
+      const response = await HttpService.put("www.URL_TEST.com");
+
+      expect(axios.put).toHaveBeenCalledWith("www.URL_TEST.com", undefined, {
+        validateStatus: expect.any(Function),
+      });
+      expect(response).toEqual({ data: { AxiosResponse: "AxiosResponse" } });
+    });
+  });
+
+  describe("When put function is called with basic auth", () => {
+    it("should call put axios with basic auth", async () => {
+      axios.put = jest.fn().mockReturnValue({
+        data: { AxiosResponse: "AxiosResponse" },
+      } as AxiosResponse<any, any>);
+
+      const response = await HttpService.put(
+        "www.URL_TEST.com",
+        { bodyData: "bodyData" },
+        {
+          auth: { username: "username", password: "password" },
+        }
+      );
+
+      expect(axios.put).toHaveBeenCalledWith(
+        "www.URL_TEST.com",
+        { bodyData: "bodyData" },
+        {
+          validateStatus: expect.any(Function),
+          auth: {
+            password: "password",
+            username: "username",
+          },
+        }
+      );
       expect(response).toEqual({ data: { AxiosResponse: "AxiosResponse" } });
     });
   });

@@ -6,14 +6,18 @@ import HTTPService from "../Http/Http.service";
 import HttpService from "../Http/Http.service";
 
 const connectMailAccount = async (account: Account, captchaToken: String) => {
-  const result = await HttpService.putAuth(
+  const result = await HttpService.put(
     getServerURL() + ":8083/api/user/mailuser",
     {
       email: account.email,
       captchaToken: captchaToken,
     },
-    account.email as string,
-    account.password as string
+    {
+      auth: {
+        username: account.email,
+        password: account.password,
+      },
+    }
   );
 
   return interpretConection(result);
@@ -63,14 +67,14 @@ const interpretConection = (result: AxiosResponse<any, any>) => {
 };
 
 const getUserFromJWT = (jwt: string) => {
-  if (jwt === undefined) return {} as Account;
+  if (jwt.split(".").length !== 3) return {} as Account;
 
   const payload = JSON.parse(window.atob(jwt.split(".")[1]));
 
   const sub = JSON.parse(payload.sub);
 
   const user = {
-    id: sub.id,
+    id: sub.iduser,
     favoriteStations: interpretJSONStationReceive(sub.favoriteStations),
   } as Account;
   return user;
@@ -127,6 +131,7 @@ const AccountService = {
   createFacebookAccount,
   isAccountExist,
   isAuthTokenSetted,
+  getUserFromJWT,
   disconnect,
   addFavoriteStation,
   removeFavoriteStation,
