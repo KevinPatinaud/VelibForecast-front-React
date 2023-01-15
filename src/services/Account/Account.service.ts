@@ -67,9 +67,11 @@ const getUserFromJWT = (jwt: string) => {
 
   const payload = JSON.parse(window.atob(jwt.split(".")[1]));
 
+  const sub = JSON.parse(payload.sub);
+
   const user = {
-    id: payload.id,
-    favoriteStations: interpretJSONStationReceive(payload.favoriteStations),
+    id: sub.id,
+    favoriteStations: interpretJSONStationReceive(sub.favoriteStations),
   } as Account;
   return user;
 };
