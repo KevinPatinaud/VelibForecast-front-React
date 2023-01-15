@@ -18,6 +18,13 @@ jest.spyOn(HttpService, "put").mockImplementation(() => {
   } as AxiosResponse<any, any>);
 });
 
+jest.spyOn(HttpService, "putAuth").mockImplementation(() => {
+  return Promise.resolve({
+    data: { JWT: "JWT TOKEN" },
+    status: 200,
+  } as AxiosResponse<any, any>);
+});
+
 jest.spyOn(HttpService, "get").mockImplementation(() => {
   return Promise.resolve({
     data: { JWT: "JWT TOKEN" },
@@ -37,7 +44,7 @@ describe("Account service", () => {
       AccountService.createMailAccount({} as Account, "captcha token");
 
       expect(HttpService.post).toHaveBeenCalledWith(
-        getServerURL() + ":8083/User/MailUser",
+        getServerURL() + ":8083/api/user/mailuser",
         {
           email: undefined,
           password: undefined,
@@ -54,13 +61,14 @@ describe("Account service", () => {
         "captcha token"
       );
 
-      expect(HttpService.put).toHaveBeenCalledWith(
-        getServerURL() + ":8083/User/MailUser",
+      expect(HttpService.putAuth).toHaveBeenCalledWith(
+        getServerURL() + ":8083/api/user/mailuser",
         {
           email: "mail",
-          password: "password",
           captchaToken: "captcha token",
-        }
+        },
+        "mail",
+        "password"
       );
     });
   });
@@ -70,7 +78,7 @@ describe("Account service", () => {
       AccountService.createFacebookAccount("Token access");
 
       expect(HttpService.post).toHaveBeenCalledWith(
-        getServerURL() + ":8083/User/FacebookUser",
+        getServerURL() + ":8083/api/user/facebookuser",
         {
           accessToken: "Token access",
         }
@@ -83,10 +91,7 @@ describe("Account service", () => {
       AccountService.connectFacebookAccount("Token access");
 
       expect(HttpService.put).toHaveBeenCalledWith(
-        getServerURL() + ":8083/User/FacebookUser",
-        {
-          accessToken: "Token access",
-        }
+        getServerURL() + ":8083/api/user/facebookuser"
       );
     });
   });
@@ -96,7 +101,7 @@ describe("Account service", () => {
       AccountService.isAccountExist("My_test_id");
 
       expect(HttpService.get).toHaveBeenCalledWith(
-        getServerURL() + ":8083/User/MailUser/exist?mail=My_test_id"
+        getServerURL() + ":8083/api/user/ismailalreadyrecorded?mail=My_test_id"
       );
     });
   });

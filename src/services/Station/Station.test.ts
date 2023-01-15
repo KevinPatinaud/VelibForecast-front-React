@@ -46,7 +46,7 @@ describe("Station service", () => {
       const stations = await StationService.getStations();
 
       expect(HttpService.get).toHaveBeenCalledWith(
-        getServerURL() + ":8083/stations"
+        getServerURL() + ":8083/api/station/"
       );
 
       expect(stations).toEqual([
@@ -112,7 +112,7 @@ describe("Station service", () => {
       const stations = await StationService.getStations();
 
       expect(HttpService.get).toHaveBeenCalledWith(
-        getServerURL() + ":8083/stations"
+        getServerURL() + ":8083/api/station/"
       );
 
       expect(stations).toEqual([
@@ -216,7 +216,7 @@ describe("Station service", () => {
       const statuses = await StationService.getStatus();
 
       expect(HttpService.get).toHaveBeenCalledWith(
-        getServerURL() + ":8083/stations/states"
+        getServerURL() + ":8083/api/station/states"
       );
 
       expect(statuses).toEqual([

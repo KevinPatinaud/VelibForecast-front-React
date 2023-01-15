@@ -42,35 +42,39 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
     setIsUserFavoriteStation(isFavStation(account, props.station));
   }, [account, props.station]);
 
+  const [statusNow, setStatusNow] = useState({} as StationState);
   const [statusIn1Hour, setStatusIn1Hour] = useState({} as StationState);
   const [statusIn2Hour, setStatusIn2Hour] = useState({} as StationState);
   const [statusIn3Hour, setStatusIn3Hour] = useState({} as StationState);
 
   useEffect(() => {
-    const fnc = async () => {
+    (async () => {
+      setStatusNow(await StationService.getStatusInFutur(props.station.id, 0));
+    })();
+  }, [props.station.id]);
+
+  useEffect(() => {
+    (async () => {
       setStatusIn1Hour(
         await StationService.getStatusInFutur(props.station.id, 60)
       );
-    };
-    fnc();
+    })();
   }, [props.station.id]);
 
   useEffect(() => {
-    const fnc = async () => {
+    (async () => {
       setStatusIn2Hour(
         await StationService.getStatusInFutur(props.station.id, 120)
       );
-    };
-    fnc();
+    })();
   }, [props.station.id]);
 
   useEffect(() => {
-    const fnc = async () => {
+    (async () => {
       setStatusIn3Hour(
         await StationService.getStatusInFutur(props.station.id, 180)
       );
-    };
-    fnc();
+    })();
   }, [props.station.id]);
 
   return (
@@ -135,8 +139,8 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
             <td className={styles.firstCol}>
               {intl.formatMessage({ id: TranslationKeys.CURRENTLY })}
             </td>
-            <td>{props.station.state?.nmbBikeAvailable}</td>
-            <td>{props.station.state?.nmbPlaceAvailable}</td>
+            <td>{statusNow.nmbBikeAvailable}</td>
+            <td>{statusNow.nmbPlaceAvailable}</td>
           </tr>
           <tr>
             <td className={styles.firstCol}>
