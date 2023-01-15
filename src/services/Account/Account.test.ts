@@ -1,6 +1,8 @@
 import { AxiosResponse } from "axios";
 import { getServerURL } from "../../helper/Utils";
 import { Account } from "../../model/Account";
+import { Station } from "../../model/Station";
+import HTTPService from "../Http/Http.service";
 import HttpService from "../Http/Http.service";
 import AccountService from "./Account.service";
 
@@ -12,13 +14,6 @@ jest.spyOn(HttpService, "post").mockImplementation(() => {
 });
 
 jest.spyOn(HttpService, "put").mockImplementation(() => {
-  return Promise.resolve({
-    data: { JWT: "JWT TOKEN" },
-    status: 200,
-  } as AxiosResponse<any, any>);
-});
-
-jest.spyOn(HttpService, "putAuth").mockImplementation(() => {
   return Promise.resolve({
     data: { JWT: "JWT TOKEN" },
     status: 200,
@@ -61,14 +56,13 @@ describe("Account service", () => {
         "captcha token"
       );
 
-      expect(HttpService.putAuth).toHaveBeenCalledWith(
+      expect(HttpService.put).toHaveBeenCalledWith(
         getServerURL() + ":8083/api/user/mailuser",
         {
           email: "mail",
           captchaToken: "captcha token",
         },
-        "mail",
-        "password"
+        { auth: { password: "password", username: "mail" } }
       );
     });
   });
@@ -111,6 +105,71 @@ describe("Account service", () => {
       AccountService.disconnect();
 
       expect(HttpService.setAuthToken).toHaveBeenCalledWith();
+    });
+  });
+
+  describe("when the jwt is wrongly formatted", () => {
+    it("should return an empty user", () => {
+      const res = AccountService.getUserFromJWT(
+        "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJmYXZvcml0ZVN0YXRpb25zXCI6W3tcInN0YXRpb25Db2RlXCI6OTAwMixcInRpbWVTdGFtcEluZm9ybWF0aW9uR290XCI6MCxcImxhdGl0dWRlXCI6NDguODc5MjIzLFwibmFtZVwiOlwiQWJiZXZpbGxlIC0gRmF1Ym91cmcgUG9pc3Nvbm5pZXJcIixcInJlbnRhbE1ldGhvZHNcIjpcIkNSRURJVENBUkRcIixcImxvbmdpdHVkZVwiOjIuMzQ5MTQ3LFwiY2FwYWNpdHlcIjoxNH1dLFwiaWR1c2VyXCI6XCJlNmI5OTllOC1hMjEwLTRjZjktYTdjNC0wOGIwZmM2YTc3YzBcIn0iLCJpYXQiOjE2NzM3OTY1NzcsImV4cCI6MTY3Mzc5Njg3N30.-HJoLqWY5OAsgbdOX-6wTyHJJsPbxUDdou0nWR-d1XZ1AKio_lCxF0ncRzr-EH81Bc_jh245JKGmR3tlI3jY9g"
+      );
+
+      expect(res).toEqual({
+        favoriteStations: [
+          {
+            capacity: 14,
+            id: 9002,
+            lat: 48.879223,
+            lng: 2.349147,
+            name: "Abbeville - Faubourg Poissonnier",
+          },
+        ],
+        id: "e6b999e8-a210-4cf9-a7c4-08b0fc6a77c0",
+      });
+    });
+  });
+
+  describe("when the jwt is well formatted", () => {
+    it("should return an user", () => {
+      const res = AccountService.getUserFromJWT("");
+
+      expect(res).toEqual({});
+    });
+  });
+
+  describe("when add a new favorite station", () => {
+    it("will informe the backend", () => {
+      jest.spyOn(HTTPService, "put").mockResolvedValue(
+        Promise.resolve({
+          data: {},
+          status: 200,
+        } as AxiosResponse<any, any>)
+      );
+
+      AccountService.addFavoriteStation({ id: 123 } as Station);
+
+      expect(HTTPService.put).toHaveBeenCalledWith(
+        "http://localhost:8083/api/user/addfavoritestation",
+        { id_station: 123 }
+      );
+    });
+  });
+
+  describe("when remove a favorite station", () => {
+    it("will informe the backend", () => {
+      jest.spyOn(HTTPService, "put").mockResolvedValue(
+        Promise.resolve({
+          data: {},
+          status: 200,
+        } as AxiosResponse<any, any>)
+      );
+
+      AccountService.removeFavoriteStation({ id: 123 } as Station);
+
+      expect(HTTPService.put).toHaveBeenCalledWith(
+        "http://localhost:8083/api/user/removefavoritestation",
+        { id_station: 123 }
+      );
     });
   });
 });

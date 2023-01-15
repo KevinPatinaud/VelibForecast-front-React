@@ -83,6 +83,7 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
         <div className={styles.stationName}>{props.station.name}</div>
         {account.isConnected && !isUserFavoriteStation && (
           <div
+            data-testid="add_fav_station"
             className={styles.addFavoriteStation}
             onClick={() => {
               AccountService.addFavoriteStation(props.station);
@@ -99,6 +100,7 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
         )}
         {account.isConnected && isUserFavoriteStation && (
           <div
+            data-testid="remove_fav_station"
             className={styles.removeFavoriteStation}
             onClick={() => {
               AccountService.removeFavoriteStation(props.station);

@@ -1,6 +1,8 @@
 import { AxiosResponse } from "axios";
 import { getServerURL } from "../../helper/Utils";
 import { Account } from "../../model/Account";
+import { StationState } from "../../model/StationState";
+import HTTPService from "../Http/Http.service";
 import HttpService from "../Http/Http.service";
 import StationService from "./Station.service";
 
@@ -226,4 +228,24 @@ describe("Station service", () => {
       ]);
     });
   });
+
+  describe("when get status in the futur is called", () =>
+    it("should return the correponding status", async () => {
+      jest.spyOn(HttpService, "get").mockResolvedValue(
+        Promise.resolve({
+          data: { numBikesAvailable: 18, numDockAvailable: 12 },
+        } as AxiosResponse<any, any>)
+      );
+
+      const status = await StationService.getStatusInFutur(123, 60);
+
+      expect(HTTPService.get).toBeCalledWith(
+        "http://localhost:8083/api/station/123/state?inMinutes=60"
+      );
+      expect(status).toEqual({
+        idStation: 123,
+        nmbBikeAvailable: 18,
+        nmbPlaceAvailable: 12,
+      } as StationState);
+    }));
 });

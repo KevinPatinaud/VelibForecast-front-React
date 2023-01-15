@@ -8,22 +8,23 @@ const post = async (url: string, data: any) => {
   return await axios.post(url, data, { validateStatus: () => true });
 };
 
-const put = async (url: string, data?: any) => {
-  return await axios.put(url, data, { validateStatus: () => true });
-};
+const put = async (url: string, data?: any, config?: any) => {
+  if (
+    config !== null &&
+    config !== undefined &&
+    config.auth !== null &&
+    config.auth !== undefined
+  )
+    return await axios.put(url, data, {
+      validateStatus: () => true,
+      auth: {
+        username: config.auth.username,
+        password: config.auth.password,
+      },
+    });
 
-const putAuth = async (
-  url: string,
-  data: any,
-  user: string,
-  password: string
-) => {
   return await axios.put(url, data, {
     validateStatus: () => true,
-    auth: {
-      username: user,
-      password: password,
-    },
   });
 };
 
@@ -59,7 +60,6 @@ const HTTPService = {
   get,
   post,
   put,
-  putAuth,
   setAuthToken,
   setHeader,
   removeHeader,
