@@ -14,31 +14,13 @@ jest
   .mockResolvedValue({} as StationState);
 
 describe("<StationDetails>", () => {
-  describe("When is rendering", () => {
+  describe("When is rendering with a disconnected user", () => {
     it("should be displayed", () => {
       const scr = render(
         <AccountContext.Provider
           value={{
             account: {
-              isConnected: true,
-              favoriteStations: [
-                {
-                  id: 123,
-                  name: "123",
-                  lat: 12,
-                  lng: 42,
-                  capacity: 25,
-                  state: {} as StationState,
-                } as Station,
-                {
-                  id: 456,
-                  name: "456",
-                  lat: 12,
-                  lng: 42,
-                  capacity: 25,
-                  state: {} as StationState,
-                } as Station,
-              ],
+              isConnected: false,
             } as Account,
             setAccount: jest.fn(),
           }}
@@ -58,7 +40,8 @@ describe("<StationDetails>", () => {
         { wrapper }
       );
 
-      expect(scr).toMatchSnapshot();
+      expect(scr.queryByTestId("add_fav_station")).not.toBeInTheDocument();
+      expect(scr.queryByTestId("remove_fav_station")).not.toBeInTheDocument();
     });
   });
 

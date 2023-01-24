@@ -11,9 +11,9 @@ import { useIntl } from "react-intl";
 import { TranslationKeys } from "../../../../locales/constants";
 import { AccountContext } from "../../../../provider/AccountProvider";
 import AccountService from "../../../../services/Account/Account.service";
-import StationService from "../../../../services/Station/Station.service";
-import { StationState } from "../../../../model/StationState";
 import { Account } from "../../../../model/Account";
+import LineTable from "./lineTable";
+import React from "react";
 
 export interface StationDetailsProps {
   station: Station;
@@ -42,41 +42,6 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
     setIsUserFavoriteStation(isFavStation(account, props.station));
   }, [account, props.station]);
 
-  const [statusNow, setStatusNow] = useState({} as StationState);
-  const [statusIn1Hour, setStatusIn1Hour] = useState({} as StationState);
-  const [statusIn2Hour, setStatusIn2Hour] = useState({} as StationState);
-  const [statusIn3Hour, setStatusIn3Hour] = useState({} as StationState);
-
-  useEffect(() => {
-    (async () => {
-      setStatusNow(await StationService.getStatusInFutur(props.station.id, 0));
-    })();
-  }, [props.station.id]);
-
-  useEffect(() => {
-    (async () => {
-      setStatusIn1Hour(
-        await StationService.getStatusInFutur(props.station.id, 60)
-      );
-    })();
-  }, [props.station.id]);
-
-  useEffect(() => {
-    (async () => {
-      setStatusIn2Hour(
-        await StationService.getStatusInFutur(props.station.id, 120)
-      );
-    })();
-  }, [props.station.id]);
-
-  useEffect(() => {
-    (async () => {
-      setStatusIn3Hour(
-        await StationService.getStatusInFutur(props.station.id, 180)
-      );
-    })();
-  }, [props.station.id]);
-
   return (
     <div>
       <div className={styles.titleStation}>
@@ -91,7 +56,7 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
               favStations?.push(props.station);
               setAccount({
                 ...account,
-                favoriteStations: [...favStations],
+                favoriteStations: favStations ? [...favStations] : [],
               });
             }}
           >
@@ -137,42 +102,37 @@ const StationDetails: FC<StationDetailsProps> = (props) => {
           </tr>
         </thead>
         <tbody>
-          <tr className={styles.highlightLine}>
-            <td className={styles.firstCol}>
-              {intl.formatMessage({ id: TranslationKeys.CURRENTLY })}
-            </td>
-            <td>{statusNow.nmbBikeAvailable}</td>
-            <td>{statusNow.nmbPlaceAvailable}</td>
-          </tr>
-          <tr>
-            <td className={styles.firstCol}>
-              {intl.formatMessage({ id: TranslationKeys.IN_1_HOUR })}
-            </td>
-            <td>{statusIn1Hour.nmbBikeAvailable}</td>
-            <td>{statusIn1Hour.nmbPlaceAvailable}</td>
-          </tr>
-          <tr className={styles.highlightLine}>
-            <td className={styles.firstCol}>
-              {intl
-                .formatMessage({ id: TranslationKeys.IN_X_HOURS })
-                .replace("{X}", "2")}
-            </td>
-            <td>{statusIn2Hour.nmbBikeAvailable}</td>
-            <td>{statusIn2Hour.nmbPlaceAvailable}</td>
-          </tr>
-          <tr>
-            <td className={styles.firstCol}>
-              {intl
-                .formatMessage({ id: TranslationKeys.IN_X_HOURS })
-                .replace("{X}", "3")}
-            </td>
-            <td>{statusIn3Hour.nmbBikeAvailable}</td>
-            <td>{statusIn3Hour.nmbPlaceAvailable}</td>
-          </tr>
+          <MemoLineTable
+            lineTitle={intl.formatMessage({ id: TranslationKeys.CURRENTLY })}
+            minutesInTheFutur={0}
+            station={props.station}
+          />
+          <MemoLineTable
+            lineTitle={intl.formatMessage({ id: TranslationKeys.IN_1_HOUR })}
+            minutesInTheFutur={60}
+            station={props.station}
+            highligth={true}
+          />
+          <MemoLineTable
+            lineTitle={intl
+              .formatMessage({ id: TranslationKeys.IN_X_HOURS })
+              .replace("{X}", "2")}
+            minutesInTheFutur={120}
+            station={props.station}
+          />
+          <MemoLineTable
+            lineTitle={intl
+              .formatMessage({ id: TranslationKeys.IN_X_HOURS })
+              .replace("{X}", "3")}
+            minutesInTheFutur={180}
+            station={props.station}
+            highligth={true}
+          />
         </tbody>
       </table>
     </div>
   );
 };
 
+const MemoLineTable = React.memo(LineTable);
 export default StationDetails;
