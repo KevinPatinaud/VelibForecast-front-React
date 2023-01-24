@@ -131,6 +131,7 @@ const AccountService = {
   createFacebookAccount,
   isAccountExist,
   isAuthTokenSetted,
+  interpretConection,
   getUserFromJWT,
   disconnect,
   addFavoriteStation,

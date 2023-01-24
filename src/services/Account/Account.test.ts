@@ -108,6 +108,26 @@ describe("Account service", () => {
     });
   });
 
+  describe("when the result of a connection is good", () =>
+    it("should save the token", () => {
+      const res = AccountService.interpretConection({
+        status: 200,
+        data: { JWT: "JWT Token" },
+      } as AxiosResponse<any, any>);
+
+      expect(HTTPService.setAuthToken).toHaveBeenCalledWith("JWT Token");
+    }));
+
+  describe("when the result of a connection is wrong", () =>
+    it("shouldn't save the token", () => {
+      const res = AccountService.interpretConection({
+        status: 401,
+        data: { JWT: "JWT Token" },
+      } as AxiosResponse<any, any>);
+
+      expect(HTTPService.setAuthToken).not.toHaveBeenCalled();
+    }));
+
   describe("when the jwt is wrongly formatted", () => {
     it("should return an empty user", () => {
       const res = AccountService.getUserFromJWT(
