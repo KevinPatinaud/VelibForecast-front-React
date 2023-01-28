@@ -54,17 +54,12 @@ describe("Sign in page", () => {
         target: { value: "password_top_secret" },
       });
 
-      userEvent.click(screen.getByTestId("reaptcha_onVerify"));
-
       userEvent.click(scr.getByText("Valider"));
 
-      expect(AccountService.connectMailAccount).toBeCalledWith(
-        {
-          email: "fake@mail.com",
-          password: "password_top_secret",
-        },
-        "token_validated_captcha"
-      );
+      expect(AccountService.connectMailAccount).toBeCalledWith({
+        email: "fake@mail.com",
+        password: "password_top_secret",
+      });
 
       await waitFor(() =>
         expect(AccountService.isAuthTokenSetted).toBeCalled()
@@ -91,17 +86,12 @@ describe("Sign in page", () => {
         target: { value: "password_top_secret" },
       });
 
-      userEvent.click(screen.getByTestId("reaptcha_onVerify"));
-
       userEvent.click(scr.getByText("Valider"));
 
-      expect(AccountService.connectMailAccount).toBeCalledWith(
-        {
-          email: "fake@mail.com",
-          password: "password_top_secret",
-        },
-        "token_validated_captcha"
-      );
+      expect(AccountService.connectMailAccount).toBeCalledWith({
+        email: "fake@mail.com",
+        password: "password_top_secret",
+      });
 
       expect(AccountService.isAuthTokenSetted).not.toBeCalled();
 
@@ -126,17 +116,12 @@ describe("Sign in page", () => {
         target: { value: "password_top_secret" },
       });
 
-      userEvent.click(screen.getByTestId("reaptcha_onVerify"));
-
       userEvent.click(scr.getByText("Valider"));
 
-      expect(AccountService.connectMailAccount).toBeCalledWith(
-        {
-          email: "fake@mail.com",
-          password: "password_top_secret",
-        },
-        "token_validated_captcha"
-      );
+      expect(AccountService.connectMailAccount).toBeCalledWith({
+        email: "fake@mail.com",
+        password: "password_top_secret",
+      });
 
       expect(AccountService.isAuthTokenSetted).not.toBeCalled();
 

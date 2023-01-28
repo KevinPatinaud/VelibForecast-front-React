@@ -25,8 +25,6 @@ const LineTable: FC<LineTableprops> = (props) => {
     })();
   }, [props.station.id, props.minutesInTheFutur]);
 
-  console.log("LineTable : " + props.minutesInTheFutur);
-
   return (
     <tr className={props.highligth ? styles.highlightLine : undefined}>
       <td className={styles.firstCol}>{props.lineTitle}</td>

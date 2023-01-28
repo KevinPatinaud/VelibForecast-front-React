@@ -51,16 +51,15 @@ describe("Account service", () => {
 
   describe("when connectMailAccount service is called", () => {
     it("should call http service", () => {
-      AccountService.connectMailAccount(
-        { email: "mail", password: "password" } as Account,
-        "captcha token"
-      );
+      AccountService.connectMailAccount({
+        email: "mail",
+        password: "password",
+      } as Account);
 
       expect(HttpService.put).toHaveBeenCalledWith(
         getServerURL() + ":8083/api/user/mailuser",
         {
           email: "mail",
-          captchaToken: "captcha token",
         },
         { auth: { password: "password", username: "mail" } }
       );

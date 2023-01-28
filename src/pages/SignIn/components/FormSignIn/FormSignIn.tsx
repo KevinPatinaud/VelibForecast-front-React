@@ -15,7 +15,6 @@ export interface FormSignInProps {
 const FormSignIn: FC<FormSignInProps> = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [captchaToken, setCaptchaToken] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const intl = useIntl();
@@ -28,21 +27,17 @@ const FormSignIn: FC<FormSignInProps> = (props) => {
         .match(
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         ) &&
-      password !== "" &&
-      captchaToken !== ""
+      password !== ""
       ? true
       : false;
   };
 
   const submitForm = async () => {
     if (formIsValide()) {
-      const result = await AccountService.connectMailAccount(
-        {
-          email: email,
-          password: password,
-        } as Account,
-        captchaToken
-      );
+      const result = await AccountService.connectMailAccount({
+        email: email,
+        password: password,
+      } as Account);
 
       if ((result as Number) === 401) {
         setErrorMessage("Please check again your password");
@@ -87,18 +82,6 @@ const FormSignIn: FC<FormSignInProps> = (props) => {
             setPassword(e.target.value);
           }}
         ></input>
-      </div>
-
-      <div className={styles.captcha}>
-        <Reaptcha
-          sitekey={process.env.REACT_APP_SITE_KEY}
-          onVerify={(token) => {
-            setCaptchaToken(token);
-          }}
-          onExpire={() => {
-            setCaptchaToken("");
-          }}
-        />
       </div>
 
       <button className={styles.signUpBtn} onClick={submitForm}>
