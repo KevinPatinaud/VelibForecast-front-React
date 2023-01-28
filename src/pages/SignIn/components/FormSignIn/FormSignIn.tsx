@@ -1,6 +1,5 @@
 import { FC, useContext, useState } from "react";
 import { useIntl } from "react-intl";
-import Reaptcha from "reaptcha";
 import styles from "./FormSignIn.module.css";
 import { TranslationKeys } from "../../../../locales/constants";
 import { Account } from "../../../../model/Account";
