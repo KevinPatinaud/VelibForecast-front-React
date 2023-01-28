@@ -5,12 +5,11 @@ import { Station } from "../../model/Station";
 import HTTPService from "../Http/Http.service";
 import HttpService from "../Http/Http.service";
 
-const connectMailAccount = async (account: Account, captchaToken: String) => {
+const connectMailAccount = async (account: Account) => {
   const result = await HttpService.put(
     getServerURL() + ":8083/api/user/mailuser",
     {
       email: account.email,
-      captchaToken: captchaToken,
     },
     {
       auth: {

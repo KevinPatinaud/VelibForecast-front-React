@@ -17,10 +17,7 @@ const put = async (url: string, data?: any, config?: any) => {
   )
     return await axios.put(url, data, {
       validateStatus: () => true,
-      auth: {
-        username: config.auth.username,
-        password: config.auth.password,
-      },
+      auth: config.auth,
     });
 
   return await axios.put(url, data, {
