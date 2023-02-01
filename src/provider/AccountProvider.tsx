@@ -10,11 +10,24 @@ export const AccountContext = React.createContext({
 });
 
 const AccountProvider: FC<{ children: JSX.Element }> = ({ children }) => {
-  const [account, setAccount] = useState({
-    isConnected: false,
-  } as Account);
+  const [account, setAccount] = useState(() => {
+    const accountSession = sessionStorage.getItem("ACCOUNT");
+    if (accountSession === null || accountSession === "")
+      return {
+        isConnected: false,
+      } as Account;
+    else return JSON.parse(accountSession) as Account;
+  });
 
-  const value = useMemo(() => ({ account, setAccount }), [account]);
+  const setSessionAccount = (account: Account) => {
+    sessionStorage.setItem("ACCOUNT", JSON.stringify(account));
+    setAccount(account);
+  };
+
+  const value = useMemo(
+    () => ({ account: account, setAccount: setSessionAccount }),
+    [account]
+  );
 
   return (
     <AccountContext.Provider value={value}>{children}</AccountContext.Provider>
