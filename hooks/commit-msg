@@ -1,0 +1,13 @@
+#!/bin/sh
+commit_msg=$(cat "${1:?Missing commit message file}")
+
+echo $commit_msg
+
+if [[ $commit_msg = *":"* ]]; then
+ echo "Git commit message : ok"
+else
+ echo "Git commit message doesn't contains : for context definition"
+ exit 1
+fi
+
+npm run test:ci
